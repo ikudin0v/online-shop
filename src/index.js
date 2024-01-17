@@ -9,8 +9,6 @@ const root = createRoot(document.getElementById("root"))
 
 
 
-// let customer = "womans"
-
 const catalog = {
   "mans": {
     "Одежда": [
@@ -22,7 +20,6 @@ const catalog = {
 			"футболки и поло",
 			"шорты",
 			"нижнее бельё"
-
     ],
     "Обувь": [
       "Мужская обувь"
@@ -95,7 +92,7 @@ const catalog = {
 
 
 function App() {
-	const [customer, setCustomer] = useState("mans")
+	const [customer, setCustomer] = useState("womans")
 	function changeCustomer( x , newCustomer) {
 		setCustomer(newCustomer)
 
@@ -132,8 +129,8 @@ function App() {
 	return (
 		<div className="App">
 
-			<div className='container border border-danger'>
-				<div className="d-flex flex-row justify-content-between border border-danger">
+			<div className='container'>
+				<div className="d-flex flex-row justify-content-between">
 					<div>
 						<ul className="nav nav-tabs">
 							<li className="nav-item">
@@ -147,7 +144,7 @@ function App() {
 							</li>
 						</ul>
 					</div>
-					<div>Магазин</div>
+					<div><h1>ONLINE STORE</h1></div>
 					<div>
 						<ul className="nav">
 							<li className="nav-item">
