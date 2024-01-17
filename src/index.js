@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import {createRoot} from "react-dom/client"
-
 import "bootstrap/dist/css/bootstrap.css"
 import "bootstrap/dist/js/bootstrap.js"
 
 const root = createRoot(document.getElementById("root"))
+
+
+
 
 
 // let customer = "womans"
@@ -12,53 +14,81 @@ const root = createRoot(document.getElementById("root"))
 const catalog = {
   "mans": {
     "Одежда": [
-      1,
-      2,
-      3
+      "костюмы и рубашки",
+      "брюки и комбинезоны",
+      "верхняя одежда",
+			"джемперы и кардиганы",
+			"джинсы",
+			"футболки и поло",
+			"шорты",
+			"нижнее бельё"
+
     ],
     "Обувь": [
-      4,
-      5,
-      6
+      "Мужская обувь"
     ],
     "Аксесуары": [
-      7,
-      8,
-      9
+      "галстуки и бабочки",
+      "очки",
+      "ремни",
+			"шарфы и шапки",
+			"перчатки и варежки",
+			"украшения",
+			"сумки",
+			"прочие аксесуары"
     ]
   },
   "womans": {
     "Одежда": [
-      1,
-      2,
-      3
+      "блузы и рубашки",
+			"брюки и комбинезоны",
+			"верхняя одежда",
+			"джемперы и кардиганы",
+			"джинсы",
+			"футболки и поло",
+			"шорты и юбки",
+			"нижнее бельё и колготки",
+			"платья"
     ],
     "Обувь": [
-      1,
-      2,
-      3
+			"Женская обувь",
     ],
     "Аксесуары": [
-      1,
-      2,
-      3
+			"Аксесуары для волос",
+			"косметика",
+			"очки",
+			"ремни",
+			"шарфы и шапки",
+			"перчатки и варежки",
+			"украшения",
+			"сумки",
+			"прочие аксесуары"
     ]
   },
   "kids": {
     "Одежда": [
-      1,
-      2,
-      3
+			"блузы и рубашки",
+			"брюки и комбинезоны",
+			"верхняя одежда",
+			"джемперы и кардиганы",
+			"джинсы",
+			"футболки и поло",
+			"шорты и юбки",
+			"нижнее бельё и колготки",
+			"платья"
     ],
     "Обувь": [
-      1,
-      2,
-      3
+			"Детская обувь",
     ],
     "Аксесуары": [
-      1,
-      2,
-      3
+			"Аксесуары для волос",
+			"галстуки и бабочки",
+			"очки",
+			"ремни",
+			"шарфы и шапки",
+			"перчатки и варежки",
+			"украшения",
+			"прочие аксесуары"
     ]
   }
 }
@@ -66,7 +96,7 @@ const catalog = {
 
 function App() {
 	const [customer, setCustomer] = useState("mans")
-	function changeCustomer( x, newCustomer) {
+	function changeCustomer( x , newCustomer) {
 		setCustomer(newCustomer)
 
 	}
@@ -85,16 +115,6 @@ function App() {
 														</ul>
 													</li>
 							))}
-	
-							<li className="nav-item dropdown">
-								<a className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">Бренды</a>
-								<ul className="dropdown-menu">
-									<li><a className="dropdown-item">Action</a></li>
-									<li><a className="dropdown-item">Another action</a></li>
-									<li><hr className="dropdown-divider" /></li>
-									<li><a className="dropdown-item">Something else here</a></li>
-								</ul>
-							</li>
 						</ul>
 	
 						<form className="d-flex" role="search">
