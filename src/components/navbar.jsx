@@ -9,8 +9,8 @@ const Navbar = (props) => {
 				<div className="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul className="navbar-nav me-auto mb-2 mb-lg-0">
 
-						{Object.keys(catalog[props.customer]).map((element) => (
-												<NavbarCategory category={element} key={element} customer={props.customer}/>
+						{Object.keys(catalog[props.customer.sex]).map((element) => (
+												<NavbarCategory category={element} key={element} customer={props.customer.sex}/>
 						))}
 					</ul>
 

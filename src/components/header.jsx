@@ -3,12 +3,17 @@ import Navbar from './navbar';
 
 
 
-const Header = () => {
-	const [customer, setCustomer] = useState("womans")
+const Header = (props) => {
+	const [customer, setCustomer] = useState({sex:"female",
+																						category:"shoes",
+																						subCategory:"shoes"
+																					})
+
 
 	function changeCustomer(newCustomer) {
-		setCustomer(newCustomer)}
-
+		setCustomer({sex:newCustomer,
+			category:"shoes",
+			subCategory:"shoes"})}
 
 
 	return (
@@ -17,10 +22,10 @@ const Header = () => {
 				<div>
 					<ul className="nav nav-tabs">
 						<li className="nav-item">
-							<button className={customer === "womans" ? "nav-link active" : "nav-link"} aria-current="page" key="womans" onClick={() => changeCustomer("womans")}>Женщинам</button>
+							<button className={customer === "female" ? "nav-link active" : "nav-link"} aria-current="page" key="female" onClick={() => changeCustomer("female")}>Женщинам</button>
 						</li>
 						<li className="nav-item">
-							<a className={customer === "mans" ? "nav-link active" : "nav-link"} key="mans" onClick={() => changeCustomer("mans")}>Мужчинам</a>
+							<a className={customer === "male" ? "nav-link active" : "nav-link"} key="male" onClick={() => changeCustomer("male")}>Мужчинам</a>
 						</li>
 						<li className="nav-item">
 							<a className={customer === "kids" ? "nav-link active" : "nav-link"} key="kids" onClick={() => changeCustomer("kids")}>Детям</a>
