@@ -1,14 +1,28 @@
 import React from "react"
-import catalog from "../catalog"
-import SubCategory from "./subCategory"
+import categories from "../catalog"
 
 
 const NavbarCategory = (props) => {
+
+	const changeCategory = (category) => {
+		props.onChange(category)
+	}
+
+
+	console.log(props)
 	return (
 		<li className="nav-item dropdown">
 			<a className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">{props.category}</a>
 			<ul className="dropdown-menu">
-				{catalog[props.customer][props.category].map((subCategory) => (<SubCategory subCategory={subCategory} key={subCategory}/>))}
+				{Object.keys(categories[props.sex][props.category]).map((subCategory) => (
+					<li>
+						<a className="dropdown-item" onClick={() => changeCategory({sex:props.sex,
+																																										category:props.category,
+																																										subCategory:subCategory
+																																									})}>{categories[props.sex][props.category][subCategory]}
+						</a>
+					</li>
+					))}
 			</ul>
 		</li>
 	)
