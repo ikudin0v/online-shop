@@ -1,6 +1,6 @@
 import React from "react";
 import NavbarCategory from "./navbarCategory"
-import categories from "../catalog"
+import categories from "../categories"
 
 
 const Header = (props) => {
@@ -8,7 +8,6 @@ const Header = (props) => {
 	const changeCategory = (customer) => {
 		props.onChange(customer)
 	}
-	// console.log (props)
 	return (
 		<div className='container'>
 			<div className="d-flex flex-row justify-content-between">

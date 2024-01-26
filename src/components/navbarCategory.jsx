@@ -1,5 +1,5 @@
 import React from "react"
-import categories from "../catalog"
+import categories from "../categories"
 
 
 const NavbarCategory = (props) => {
@@ -9,7 +9,6 @@ const NavbarCategory = (props) => {
 	}
 
 
-	console.log(props)
 	return (
 		<li className="nav-item dropdown">
 			<a className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">{props.category}</a>
