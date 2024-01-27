@@ -5,7 +5,7 @@ import Pagination from './pagination.jsx';
 let prevCategory
 const ProductPage = (props) => {
 
-	const pageSize = 8
+	const pageSize = 4
 	const [currentPage, setCurrentPage] = useState(1)
 
 	if (prevCategory !== props.customer.sex+props.customer.subCategory){
