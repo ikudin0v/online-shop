@@ -9,7 +9,7 @@ const Header = (props) => {
 		props.onChange(customer)
 	}
 	return (
-		<div className='container'>
+		<div className='container mt-3'>
 			<div className="d-flex flex-row justify-content-between">
 				<div>
 					<ul className="nav nav-tabs">

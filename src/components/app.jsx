@@ -9,12 +9,18 @@ function App() {
 																						subCategory:""
 																					})
 
+
+
+
+
 	const changeCustomer = (newCustomer) => {
-		console.log(newCustomer)
 		setCustomer({sex:newCustomer.sex,
 			category:newCustomer.category,
 			subCategory:newCustomer.subCategory})
-		
+
+
+
+
 
 
 

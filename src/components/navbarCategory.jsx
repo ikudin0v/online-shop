@@ -14,7 +14,7 @@ const NavbarCategory = (props) => {
 			<a className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">{props.category}</a>
 			<ul className="dropdown-menu">
 				{Object.keys(categories[props.sex][props.category]).map((subCategory) => (
-					<li>
+					<li key={subCategory}>
 						<a className="dropdown-item" onClick={() => changeCategory({sex:props.sex,
 																																										category:props.category,
 																																										subCategory:subCategory
