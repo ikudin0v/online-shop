@@ -34,6 +34,11 @@ const ProductPage = (props) => {
 
 
 	const productList = getProductList(props.customer.sex, props.customer.subCategory)
+	const filteredProductList = productList.filter((item) => item.color === currentColor)
+
+
+
+
 	if (prevCategory !== props.customer.sex+props.customer.subCategory){
 		setCurrentPage(1)
 		prevCategory=props.customer.sex+props.customer.subCategory
@@ -62,7 +67,7 @@ const ProductPage = (props) => {
 			<div className="container d-flex flex-row">
 				<Filter currentColor={currentColor} colors={getColors()} onColorChange={handleFilterChange}/>
 				<div className="row">
-					{productList.filter((item) => item.color === currentColor).slice((currentPage-1)*pageSize,(currentPage-1)*pageSize+pageSize).map((item) => (
+					{filteredProductList.slice((currentPage-1)*pageSize,(currentPage-1)*pageSize+pageSize).map((item) => (
 						<div className="col" key={item.maleufacturerCode}>
 							<div className="card text-center m-4 h-90" style={{width: "18rem"}}>
 								<img src={item.img[0]} className="card-img-top" alt="..." />
@@ -74,7 +79,7 @@ const ProductPage = (props) => {
 							</div>
 						</div>
 					))}
-					<Pagination productCount={productList.length} pageSize={pageSize} onPageChange={handlePageChange} currentPage={currentPage}/>
+					<Pagination productCount={filteredProductList.length} pageSize={pageSize} onPageChange={handlePageChange} currentPage={currentPage}/>
 				</div>
 				
 			</div>
