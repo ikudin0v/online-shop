@@ -34,7 +34,8 @@ const ProductPage = (props) => {
 
 
 	const productList = getProductList(props.customer.sex, props.customer.subCategory)
-	const filteredProductList = productList.filter((item) => item.color === currentColor)
+	let filteredProductList = []
+	currentColor === "" ? filteredProductList = productList : filteredProductList = productList.filter((item) => item.color === currentColor)
 
 
 
@@ -52,6 +53,7 @@ const ProductPage = (props) => {
 	const handleFilterChange = (color) => {
 		console.log(color)
 		setCurrentColor(color)
+		setCurrentPage(1)
 	}
 
 
