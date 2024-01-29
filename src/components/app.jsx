@@ -5,8 +5,8 @@ import ProductPage from './ProductPage';
 function App() {
 
 	const [customer, setCustomer] = useState({sex:"female",
-																						category:"",
-																						subCategory:""
+																						category:"Одежда",
+																						subCategory:"underwear"
 																					})
 
 
@@ -17,16 +17,6 @@ function App() {
 		setCustomer({sex:newCustomer.sex,
 			category:newCustomer.category,
 			subCategory:newCustomer.subCategory})
-
-
-
-
-
-
-
-
-
-
 	}
 
 
