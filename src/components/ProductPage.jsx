@@ -8,7 +8,8 @@ const ProductPage = (props) => {
 	
 	const pageSize = 4
 	const [currentPage, setCurrentPage] = useState(1)
-	const [currentColor, setCurrentColor] = useState("")
+	const [currentColor, setCurrentColor] = useState([])
+
 
 
 
@@ -19,7 +20,7 @@ const ProductPage = (props) => {
 				productList.push(catalog[key])
 			}
 		}
-		console.log(productList)
+		// console.log(productList)
 		return productList
 	}
 
@@ -32,10 +33,19 @@ const ProductPage = (props) => {
 	}
 
 
-
 	const productList = getProductList(props.customer.sex, props.customer.subCategory)
-	let filteredProductList = []
-	currentColor === "" ? filteredProductList = productList : filteredProductList = productList.filter((item) => item.color === currentColor)
+	const [filteredProductList, setFilteredProductList] = useState(productList)
+
+	
+	const getFilteredProductList = () => {
+		let newFilteredProductList = productList.filter((item) => currentColor.indexOf(item.color) !== -1)
+		return (newFilteredProductList)
+	}
+
+
+
+	// setFilteredProductList(productList)
+	// currentColor.length === 0 ? 	setFilteredProductList(productList) : 	setFilteredProductList(productList.filter((item) => currentColor.indexOf(item.color) !== -1))
 
 
 
@@ -43,7 +53,7 @@ const ProductPage = (props) => {
 	if (prevCategory !== props.customer.sex+props.customer.subCategory){
 		setCurrentPage(1)
 		prevCategory=props.customer.sex+props.customer.subCategory
-		setCurrentColor("")
+		setCurrentColor([])
 	}
 
 	const handlePageChange = (pageIndex) => {
@@ -51,9 +61,22 @@ const ProductPage = (props) => {
 	}
 
 	const handleFilterChange = (color) => {
-		console.log(color)
-		setCurrentColor(color)
+		let newColors = currentColor
+		const newFilteredProductList = productList.filter((item) => newColors.indexOf(item.color) !== -1)
+		if (color === "clear"){
+			newColors = []
+			setFilteredProductList(productList)
+		}
+		else {currentColor.indexOf(color) ===-1 ? newColors.push(color) : newColors = newColors.filter((item) => item !== color)}
+		newColors.length === 0 ? setFilteredProductList(productList) : setFilteredProductList(newFilteredProductList)
+
+
+
+		setCurrentColor(newColors)
 		setCurrentPage(1)
+
+
+		
 	}
 
 
@@ -69,7 +92,7 @@ const ProductPage = (props) => {
 			<div className="container d-flex flex-row">
 				<Filter currentColor={currentColor} colors={getColors()} onColorChange={handleFilterChange}/>
 				<div className="row">
-					{filteredProductList.slice((currentPage-1)*pageSize,(currentPage-1)*pageSize+pageSize).map((item) => (
+					{getFilteredProductList().slice((currentPage-1)*pageSize,(currentPage-1)*pageSize+pageSize).map((item) => (
 						<div className="col" key={item.maleufacturerCode}>
 							<div className="card text-center m-4 h-90" style={{width: "18rem"}}>
 								<img src={item.img[0]} className="card-img-top" alt="..." />
@@ -81,7 +104,7 @@ const ProductPage = (props) => {
 							</div>
 						</div>
 					))}
-					<Pagination productCount={filteredProductList.length} pageSize={pageSize} onPageChange={handlePageChange} currentPage={currentPage}/>
+					<Pagination productCount={getFilteredProductList().length} pageSize={pageSize} onPageChange={handlePageChange} currentPage={currentPage}/>
 				</div>
 				
 			</div>
