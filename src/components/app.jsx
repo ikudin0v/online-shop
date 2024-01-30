@@ -14,9 +14,9 @@ function App() {
 
 
 	const changeCustomer = (newCustomer) => {
-		setCustomer({sex:newCustomer.sex,
-			category:newCustomer.category,
-			subCategory:newCustomer.subCategory})
+		setCustomer({	sex:newCustomer.sex,
+									category:newCustomer.category,
+									subCategory:newCustomer.subCategory})
 	}
 
 

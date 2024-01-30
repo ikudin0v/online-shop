@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import catalog from '../catalog.js'
+import catalog from '../fakeAPI/catalog.js'
 import Pagination from './pagination.jsx';
 import Filter from './filter.jsx';
 

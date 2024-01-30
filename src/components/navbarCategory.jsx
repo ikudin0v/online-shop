@@ -1,24 +1,19 @@
 import React from "react"
-import categories from "../categories"
+import categories from "../fakeAPI/categories"
 
 
-const NavbarCategory = (props) => {
-
-	const changeCategory = (category) => {
-		props.onChange(category)
-	}
-
+const NavbarCategory = ({category, sex, onChange}) => {
 
 	return (
 		<li className="nav-item dropdown">
-			<a className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">{props.category}</a>
+			<a className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">{category}</a>
 			<ul className="dropdown-menu">
-				{Object.keys(categories[props.sex][props.category]).map((subCategory) => (
+				{Object.keys(categories[sex][category]).map((subCategory) => (
 					<li key={subCategory}>
-						<a className="dropdown-item" onClick={() => changeCategory({sex:props.sex,
-																																										category:props.category,
+						<a className="dropdown-item" onClick={() => onChange({sex:sex,
+																																										category:category,
 																																										subCategory:subCategory
-																																									})}>{categories[props.sex][props.category][subCategory]}
+																																									})}>{categories[sex][category][subCategory]}
 						</a>
 					</li>
 					))}

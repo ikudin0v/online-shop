@@ -1,32 +1,29 @@
 import React from "react";
 import NavbarCategory from "./navbarCategory"
-import categories from "../categories"
+import categories from "../fakeAPI/categories"
 
 
-const Header = (props) => {
+const Header = ({customer, onChange}) => {
 
-	const changeCategory = (customer) => {
-		props.onChange(customer)
-	}
 	return (
 		<div className='container mt-3'>
 			<div className="d-flex flex-row justify-content-between">
 				<div>
 					<ul className="nav nav-tabs">
 						<li className="nav-item">
-							<button className={props.customer.sex === "female" ? "nav-link active" : "nav-link"} aria-current="page" key="female" onClick={() => changeCategory({sex:"female",
+							<button className={customer.sex === "female" ? "nav-link active" : "nav-link"} aria-current="page" key="female" onClick={() => onChange({sex:"female",
 																																																																																		category:"",
 																																																																																		subCategory:""
 																																																																																	})}>Женщинам</button>
 						</li>
 						<li className="nav-item">
-							<a className={props.customer.sex === "male" ? "nav-link active" : "nav-link"} key="male" onClick={() => changeCategory({sex:"male",
+							<a className={customer.sex === "male" ? "nav-link active" : "nav-link"} key="male" onClick={() => onChange({sex:"male",
 																																																																			category:"",
 																																																																			subCategory:""
 																																																																		})}>Мужчинам</a>
 						</li>
 						<li className="nav-item">
-							<a className={props.customer.sex === "kids" ? "nav-link active" : "nav-link"} key="kids" onClick={() => changeCategory({sex:"kids",
+							<a className={customer.sex === "kids" ? "nav-link active" : "nav-link"} key="kids" onClick={() => onChange({sex:"kids",
 																																																																			category:"",
 																																																																			subCategory:""
 																																																																		})}>Детям</a>
@@ -45,17 +42,14 @@ const Header = (props) => {
 					</ul>
 				</div>
 			</div>
-
 			<nav className="navbar navbar-expand-lg bg-body-tertiary">
 			<div className="container-fluid">
 				<div className="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul className="navbar-nav me-auto mb-2 mb-lg-0">
-
-						{Object.keys(categories[props.customer.sex]).map((element) => (
-												<NavbarCategory category={element} key={element} sex={props.customer.sex} onChange={changeCategory}/>
+						{Object.keys(categories[customer.sex]).map((element) => (
+												<NavbarCategory category={element} key={element} sex={customer.sex} onChange={onChange}/>
 						))}
 					</ul>
-
 					<form className="d-flex" role="search">
 						<input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
 						<button className="btn btn-outline-success" type="submit">Search</button>
@@ -63,9 +57,6 @@ const Header = (props) => {
 				</div>
 			</div>
 		</nav>
-
-
-
 		</div>
 	)
 }
