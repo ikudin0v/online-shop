@@ -4,15 +4,8 @@ import Pagination from './pagination.jsx';
 import Filter from './filter.jsx';
 
 let prevCategory
-const ProductPage = (props) => {
-	
-	const pageSize = 4
-	const [currentPage, setCurrentPage] = useState(1)
-	const [currentColor, setCurrentColor] = useState([])
-
-
-
-
+const ProductPage = ({customer}) => {
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 	const getProductList = (sex, subCategory) => {
 		let productList = []
 		for (let key of Object.keys(catalog)){
@@ -25,58 +18,100 @@ const ProductPage = (props) => {
 	}
 
 	const getColors = () => {
-		let colors = {}
+		let colors = []
 		Object.keys(productList).map((product) => {
-			colors[productList[product].color] = false
+			if (colors.indexOf(productList[product].color) === -1) {colors.push(productList[product].color)}
 		})
 		return(colors)
-	}
-
-
-	const productList = getProductList(props.customer.sex, props.customer.subCategory)
-	const [filteredProductList, setFilteredProductList] = useState(productList)
-
-	
-	const getFilteredProductList = () => {
-		let newFilteredProductList = productList.filter((item) => currentColor.indexOf(item.color) !== -1)
-		return (newFilteredProductList)
-	}
-
-
-
-	// setFilteredProductList(productList)
-	// currentColor.length === 0 ? 	setFilteredProductList(productList) : 	setFilteredProductList(productList.filter((item) => currentColor.indexOf(item.color) !== -1))
-
-
-
-
-	if (prevCategory !== props.customer.sex+props.customer.subCategory){
-		setCurrentPage(1)
-		prevCategory=props.customer.sex+props.customer.subCategory
-		setCurrentColor([])
 	}
 
 	const handlePageChange = (pageIndex) => {
 		setCurrentPage(pageIndex)
 	}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	const productList = getProductList(customer.sex, customer.subCategory)
+	const pageSize = 4
+	const [currentPage, setCurrentPage] = useState(1)
+	const [filterColors, setFilterColors] = useState(getColors())
+	const [filteredProductList, setFilteredProductList] = useState(getProductList())
+
+	if (prevCategory !== customer.sex+customer.subCategory){
+		setCurrentPage(1)
+		prevCategory=customer.sex+customer.subCategory
+		console.log(getProductList(customer.sex, customer.subCategory))
+		console.log(getColors())
+		setFilteredProductList(getProductList(customer.sex, customer.subCategory))
+		setFilterColors(getColors())
+	}
+	
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+	// const getFilteredProductList = () => {
+	// 	let newFilteredProductList = productList.filter((item) => filterColors.indexOf(item.color) !== -1)
+	// 	return (newFilteredProductList)
+	// }
+
+
+
+
 
 	const handleFilterChange = (color) => {
-		let newColors = currentColor
-		const newFilteredProductList = productList.filter((item) => newColors.indexOf(item.color) !== -1)
-		if (color === "clear"){
+		let newColors = []
+		let newFilteredProductList = []
+		if (color === "clear") {			//очищение фильтра
 			newColors = []
-			setFilteredProductList(productList)
-		}
-		else {currentColor.indexOf(color) ===-1 ? newColors.push(color) : newColors = newColors.filter((item) => item !== color)}
-		newColors.length === 0 ? setFilteredProductList(productList) : setFilteredProductList(newFilteredProductList)
+			newFilteredProductList = getProductList(customer.sex, customer.subCategory)
+			setFilterColors(newColors)
+			setFilteredProductList(newFilteredProductList)
+		} else { if (filterColors.indexOf(color) !== -1 && filterColors.length !== getColors().length) //Добавление или удаление цвета?
+							
+							{ console.log("2")	////удаляем цвет из списка фильтрации
+							newColors = filterColors
+							newColors = newColors.filter((item) => item !== color)
+							if (newColors.length === 0) {/////////если список равен 0/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+								console.log("3")
+								newColors = getColors()
+								newFilteredProductList = getProductList(customer.sex, customer.subCategory)
+								setFilterColors(newColors)
+								setFilteredProductList(newFilteredProductList)
+							} else
+							{
+								console.log("4")
+								newFilteredProductList = getProductList(customer.sex, customer.subCategory).filter((item) => newColors.indexOf(item.color) !== -1)
+								setFilterColors(newColors)
+								setFilteredProductList(newFilteredProductList)
+							}
+						}
+
+							else ////добавляем цвет в список фильтрации
+							{ console.log("1")
+								filterColors.length === getColors().length ? newColors = [] : newColors = filterColors////если фильтр сброшен *(отображается всё), то обнулить список фильтров и потом добавлять уже новый
+								newColors.push(color)
+								newFilteredProductList = getProductList(customer.sex, customer.subCategory).filter((item) => newColors.indexOf(item.color) !== -1)
+								setFilterColors(newColors)
+								setFilteredProductList(newFilteredProductList)
+							}
+						setCurrentPage(1)
+					}
 
 
 
-		setCurrentColor(newColors)
-		setCurrentPage(1)
 
 
-		
+		// let newColors = filterColors
+		// console.log(filterColors)
+		// const newFilteredProductList = productList.filter((item) => newColors.indexOf(item.color) !== -1)
+		// if (color === "clear"){
+		// 	newColors = getColors()
+		// 	setFilteredProductList(newFilteredProductList)
+		// 	console.log(filteredProductList)
+		// }
+	// 	else {filterColors.indexOf(color) ===-1 ? newColors.push(color) : newColors = newColors.filter((item) => item !== color)}
+	// 	newColors.length === 0 ? setFilteredProductList(productList) : setFilteredProductList(newFilteredProductList)
+	// 	setFilterColors(newColors)
+	// 	setCurrentPage(1)
 	}
 
 
@@ -90,9 +125,9 @@ const ProductPage = (props) => {
 	return (
 		
 			<div className="container d-flex flex-row">
-				<Filter currentColor={currentColor} colors={getColors()} onColorChange={handleFilterChange}/>
+				<Filter filterColors={filterColors} colors={getColors()} onColorChange={handleFilterChange}/>
 				<div className="row">
-					{getFilteredProductList().slice((currentPage-1)*pageSize,(currentPage-1)*pageSize+pageSize).map((item) => (
+					{filteredProductList.slice((currentPage-1)*pageSize,(currentPage-1)*pageSize+pageSize).map((item) => (
 						<div className="col" key={item.maleufacturerCode}>
 							<div className="card text-center m-4 h-90" style={{width: "18rem"}}>
 								<img src={item.img[0]} className="card-img-top" alt="..." />
@@ -104,7 +139,7 @@ const ProductPage = (props) => {
 							</div>
 						</div>
 					))}
-					<Pagination productCount={getFilteredProductList().length} pageSize={pageSize} onPageChange={handlePageChange} currentPage={currentPage}/>
+					<Pagination productCount={filteredProductList.length} pageSize={pageSize} onPageChange={handlePageChange} currentPage={currentPage}/>
 				</div>
 				
 			</div>
