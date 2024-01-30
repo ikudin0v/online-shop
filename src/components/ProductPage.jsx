@@ -5,7 +5,7 @@ import Filter from './filter.jsx';
 
 let prevCategory
 const ProductPage = ({customer}) => {
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	const getProductList = (sex, subCategory) => {
 		let productList = []
 		for (let key of Object.keys(catalog)){
@@ -13,7 +13,6 @@ const ProductPage = ({customer}) => {
 				productList.push(catalog[key])
 			}
 		}
-		// console.log(productList)
 		return productList
 	}
 
@@ -28,7 +27,7 @@ const ProductPage = ({customer}) => {
 	const handlePageChange = (pageIndex) => {
 		setCurrentPage(pageIndex)
 	}
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	const productList = getProductList(customer.sex, customer.subCategory)
 	const pageSize = 4
 	const [currentPage, setCurrentPage] = useState(1)
@@ -38,89 +37,40 @@ const ProductPage = ({customer}) => {
 	if (prevCategory !== customer.sex+customer.subCategory){
 		setCurrentPage(1)
 		prevCategory=customer.sex+customer.subCategory
-		console.log(getProductList(customer.sex, customer.subCategory))
-		console.log(getColors())
 		setFilteredProductList(getProductList(customer.sex, customer.subCategory))
 		setFilterColors(getColors())
 	}
-	
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-	// const getFilteredProductList = () => {
-	// 	let newFilteredProductList = productList.filter((item) => filterColors.indexOf(item.color) !== -1)
-	// 	return (newFilteredProductList)
-	// }
-
-
-
-
 
 	const handleFilterChange = (color) => {
-		let newColors = []
-		let newFilteredProductList = []
+		let newColors
+		let newFilteredProductList
 		if (color === "clear") {			//очищение фильтра
-			newColors = []
+			newColors = getColors()
 			newFilteredProductList = getProductList(customer.sex, customer.subCategory)
-			setFilterColors(newColors)
-			setFilteredProductList(newFilteredProductList)
-		} else { if (filterColors.indexOf(color) !== -1 && filterColors.length !== getColors().length) //Добавление или удаление цвета?
-							
-							{ console.log("2")	////удаляем цвет из списка фильтрации
-							newColors = filterColors
-							newColors = newColors.filter((item) => item !== color)
-							if (newColors.length === 0) {/////////если список равен 0/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-								console.log("3")
-								newColors = getColors()
-								newFilteredProductList = getProductList(customer.sex, customer.subCategory)
-								setFilterColors(newColors)
-								setFilteredProductList(newFilteredProductList)
-							} else
-							{
-								console.log("4")
-								newFilteredProductList = getProductList(customer.sex, customer.subCategory).filter((item) => newColors.indexOf(item.color) !== -1)
-								setFilterColors(newColors)
-								setFilteredProductList(newFilteredProductList)
-							}
-						}
-
-							else ////добавляем цвет в список фильтрации
-							{ console.log("1")
-								filterColors.length === getColors().length ? newColors = [] : newColors = filterColors////если фильтр сброшен *(отображается всё), то обнулить список фильтров и потом добавлять уже новый
-								newColors.push(color)
-								newFilteredProductList = getProductList(customer.sex, customer.subCategory).filter((item) => newColors.indexOf(item.color) !== -1)
-								setFilterColors(newColors)
-								setFilteredProductList(newFilteredProductList)
-							}
-						setCurrentPage(1)
-					}
-
-
-
-
-
-		// let newColors = filterColors
-		// console.log(filterColors)
-		// const newFilteredProductList = productList.filter((item) => newColors.indexOf(item.color) !== -1)
-		// if (color === "clear"){
-		// 	newColors = getColors()
-		// 	setFilteredProductList(newFilteredProductList)
-		// 	console.log(filteredProductList)
-		// }
-	// 	else {filterColors.indexOf(color) ===-1 ? newColors.push(color) : newColors = newColors.filter((item) => item !== color)}
-	// 	newColors.length === 0 ? setFilteredProductList(productList) : setFilteredProductList(newFilteredProductList)
-	// 	setFilterColors(newColors)
-	// 	setCurrentPage(1)
+		} else
+		{ if (filterColors.indexOf(color) !== -1 && filterColors.length !== getColors().length) //Добавление или удаление цвета?
+			{	////удаляем цвет из списка фильтрации
+				newColors = filterColors
+				newColors = newColors.filter((item) => item !== color)
+				if (newColors.length === 0) 
+				{/////////если список пустой
+					newColors = getColors()
+					newFilteredProductList = getProductList(customer.sex, customer.subCategory)
+				} else
+				{
+					newFilteredProductList = getProductList(customer.sex, customer.subCategory).filter((item) => newColors.indexOf(item.color) !== -1)
+				}
+		}	else ////добавляем цвет в список фильтрации
+			{
+				filterColors.length === getColors().length ? newColors = [] : newColors = filterColors////если фильтр сброшен *(отображается всё), то обнулить список фильтров и потом добавлять уже новый
+				newColors.push(color)
+				newFilteredProductList = getProductList(customer.sex, customer.subCategory).filter((item) => newColors.indexOf(item.color) !== -1)
+			}
+		}
+		setFilterColors(newColors)
+		setFilteredProductList(newFilteredProductList)
+		setCurrentPage(1)
 	}
-
-
-
-
-
-
-
-
 
 	return (
 		
