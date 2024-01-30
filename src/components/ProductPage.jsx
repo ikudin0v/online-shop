@@ -1,101 +1,51 @@
-import React, { useState } from 'react';
-import catalog from '../fakeAPI/catalog.js'
-import Pagination from './pagination.jsx';
-import Filter from './filter.jsx';
+import React, { useState } from "react";
 
-let prevCategory
-const ProductPage = ({customer}) => {
+const ProductPage = ({product}) => {
+	console.log (product)
+	const [selectedImg, setSelectedImg] = useState(product.img[0])
+	const [selectedSize, setSelectedSize] = useState("")
 
-	const getProductList = (sex, subCategory) => {
-		let productList = []
-		for (let key of Object.keys(catalog)){
-			if (catalog[key].category === subCategory && catalog[key].sex === sex) {
-				productList.push(catalog[key])
-			}
-		}
-		return productList
-	}
-
-	const getColors = () => {
-		let colors = []
-		Object.keys(productList).map((product) => {
-			if (colors.indexOf(productList[product].color) === -1) {colors.push(productList[product].color)}
-		})
-		return(colors)
-	}
-
-	const handlePageChange = (pageIndex) => {
-		setCurrentPage(pageIndex)
-	}
-
-	const productList = getProductList(customer.sex, customer.subCategory)
-	const pageSize = 4
-	const [currentPage, setCurrentPage] = useState(1)
-	const [filterColors, setFilterColors] = useState(getColors())
-	const [filteredProductList, setFilteredProductList] = useState(getProductList())
-
-	if (prevCategory !== customer.sex+customer.subCategory){
-		setCurrentPage(1)
-		prevCategory=customer.sex+customer.subCategory
-		setFilteredProductList(getProductList(customer.sex, customer.subCategory))
-		setFilterColors(getColors())
-	}
-
-	const handleFilterChange = (color) => {
-		let newColors
-		let newFilteredProductList
-		if (color === "clear") {			//очищение фильтра
-			newColors = getColors()
-			newFilteredProductList = getProductList(customer.sex, customer.subCategory)
-		} else
-		{ if (filterColors.indexOf(color) !== -1 && filterColors.length !== getColors().length) //Добавление или удаление цвета?
-			{	////удаляем цвет из списка фильтрации
-				newColors = filterColors
-				newColors = newColors.filter((item) => item !== color)
-				if (newColors.length === 0) 
-				{/////////если список пустой
-					newColors = getColors()
-					newFilteredProductList = getProductList(customer.sex, customer.subCategory)
-				} else
-				{
-					newFilteredProductList = getProductList(customer.sex, customer.subCategory).filter((item) => newColors.indexOf(item.color) !== -1)
-				}
-		}	else ////добавляем цвет в список фильтрации
-			{
-				filterColors.length === getColors().length ? newColors = [] : newColors = filterColors////если фильтр сброшен *(отображается всё), то обнулить список фильтров и потом добавлять уже новый
-				newColors.push(color)
-				newFilteredProductList = getProductList(customer.sex, customer.subCategory).filter((item) => newColors.indexOf(item.color) !== -1)
-			}
-		}
-		setFilterColors(newColors)
-		setFilteredProductList(newFilteredProductList)
-		setCurrentPage(1)
+	const handleSelectSize = (size) => {
+		selectedSize === size ? setSelectedSize("") : setSelectedSize(size)
 	}
 
 	return (
-		
-			<div className="container d-flex flex-row">
-				<Filter filterColors={filterColors} colors={getColors()} onColorChange={handleFilterChange}/>
-				<div className="row">
-					{filteredProductList.slice((currentPage-1)*pageSize,(currentPage-1)*pageSize+pageSize).map((item) => (
-						<div className="col" key={item.maleufacturerCode}>
-							<div className="card text-center m-4 h-90" style={{width: "18rem"}}>
-								<img src={item.img[0]} className="card-img-top" alt="..." />
-								<div className="card-body">
-									<h5 className="card-title">{item.name}</h5>
-									<p className="card-text">{item.price} Р</p>
-									<a href="#" className="btn btn-primary">Подробнее</a>
-								</div>
+		<div className="container d-flex flex-row">
+			<div className="d-flex w-50 flex-row">
+				<div className="d-flex flex-column w-25">
+						{product.img.map((item) => (
+							<div className="d-flex p-3">
+								<img src={item} className="rounded mx-auto d-block" alt="" key={"img"+product.img.indexOf(item)} onClick={() => setSelectedImg(item)}/>
 							</div>
-						</div>
-					))}
-					<Pagination productCount={filteredProductList.length} pageSize={pageSize} onPageChange={handlePageChange} currentPage={currentPage}/>
+						))}
 				</div>
-				
-			</div>
-			
-		)
-	
-}
+				<div className="d-flex w-75 p-3">
+					<img src={selectedImg} className="d-block rounded d-block h-100" alt="" />
+				</div>
 
+			</div>
+			<div className="container w-50 d-flex flex-column">
+				<div className="fw-bold">{product.name}</div>
+				<div>{product.price + " Р"}</div>
+				<div>{"Цвет: " + product.color}</div>
+				<div>Размеры:</div>
+				<nav aria-label="Page navigation example">
+					<ul class="pagination">
+						{Object.keys(product.size).map((item) => (
+						<li class={product.size[item].availability === "В наличии" ? (selectedSize===item?"page-item active":"page-item"):"page-item disabled"}><a class="page-link" href="#" onClick={() => handleSelectSize(item)}>{item}</a></li>
+						))}
+					</ul>
+				</nav>
+				<button type="button" class="btn btn-primary">В корзину</button>
+				<div className="fw-bold">Описание:</div>
+				<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+			</div>
+
+
+
+
+		</div>
+	)
+}
+ 
 export default ProductPage
