@@ -14,7 +14,7 @@ const MainPage = ({sex}) => {
 					<ul className="list-group m-2">
 						<li className="list-group-item list-group-item-primary">{category}</li>
 						{Object.keys(categories[sex][category]).map((subCategory) => (
-							<li className="list-group-item"><Link to={"/"+sex+"/"+subCategory}>{categories[sex][category][subCategory]}</Link></li>
+							<li className="list-group-item list-group-item-action"><Link className="text-decoration-none text-reset"to={"/"+sex+"/"+subCategory}>{categories[sex][category][subCategory]}</Link></li>
 						))}
 					</ul>
 				))}

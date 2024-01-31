@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import catalog from '../fakeAPI/catalog.js'
 import Pagination from './pagination.jsx';
 import Filter from './filter.jsx';
+import { Link } from "react-router-dom";
 
 let prevCategory
 const ProductsListPage = ({match}) => {
@@ -32,7 +33,7 @@ const ProductsListPage = ({match}) => {
 	const pageSize = 4
 	const [currentPage, setCurrentPage] = useState(1)
 	const [filterColors, setFilterColors] = useState(getColors())
-	const [filteredProductList, setFilteredProductList] = useState(getProductList())
+	const [filteredProductList, setFilteredProductList] = useState(getProductList(match.params.page, match.params.subCategory))
 
 	if (prevCategory !== match.params.page+match.params.subCategory){
 		setCurrentPage(1)
@@ -72,33 +73,44 @@ const ProductsListPage = ({match}) => {
 		setCurrentPage(1)
 	}
 
-	const handleProduct = (product) => {
-		console.log(product)
-	}
+	const sexToRus = {male:"Мужчинам",
+										female:"Женщинам",
+										kids:"Детям",}
 
 	return (
-		
+		<>
+			<div className="container d-flex flex-row text-decoration-none text-reset">
+				{/* <p><Link to={"/" + match.params.page} className=" text-reset">{sexToRus[match.params.page] + ": Главная"} </Link>{"<<"}<Link to={"/" + match.params.page} className=" text-reset">{catalog[].} </Link></p> */}
+				{/* <Link to={"/" + match.params.page} className="btn btn-secondary">{"<< Назад"}</Link> */}
+			</div>
+			<div className="container d-flex flex-row">
+				<Link to={"/" + match.params.page} className="btn btn-secondary mt-3">{"<< Назад"}</Link>
+			</div>
 			<div className="container d-flex flex-row">
 				<Filter filterColors={filterColors} colors={getColors()} onColorChange={handleFilterChange}/>
 				<div className="row">
 					{filteredProductList.slice((currentPage-1)*pageSize,(currentPage-1)*pageSize+pageSize).map((item) => (
 						<div className="col" key={item.maleufacturerCode}>
-							<div className="card text-center m-4 h-90" style={{width: "18rem"}} onClick={() => handleProduct(item)}>
+
+							<div className="card text-center m-4 h-90" style={{width: "18rem"}} >
 								<img src={item.img[0]} className="card-img-top" alt="..." />
 								<div className="card-body">
 									<h5 className="card-title">{item.name}</h5>
 									<p className="card-text">{item.price} Р</p>
-									<a href="#" className="btn btn-primary">Подробнее</a>
+									<Link to={"/" + match.params.page + "/" + match.params.subCategory + "/" + item.maleufacturerCode} className="btn btn-primary">Подробнее</Link>
 								</div>
 							</div>
+							
+
+
 						</div>
 					))}
 					<Pagination productCount={filteredProductList.length} pageSize={pageSize} onPageChange={handlePageChange} currentPage={currentPage}/>
 				</div>
 				
 			</div>
-			
-		)
+		</>
+	)
 	
 }
 

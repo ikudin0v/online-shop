@@ -3,7 +3,7 @@ import categories from "../fakeAPI/categories"
 import { Link } from "react-router-dom";
 
 
-const NavbarCategory = ({category, sex, onChange}) => {
+const NavbarCategory = ({category, sex,}) => {
 
 	return (
 		<li className="nav-item dropdown">
@@ -11,10 +11,7 @@ const NavbarCategory = ({category, sex, onChange}) => {
 			<ul className="dropdown-menu">
 				{Object.keys(categories[sex][category]).map((subCategory) => (
 					<li key={subCategory}>
-						<Link to={"/"+sex+"/"+subCategory} className="dropdown-item" onClick={() => onChange({sex:sex,
-																																										category:category,
-																																										subCategory:subCategory
-																																									})}>{categories[sex][category][subCategory]}
+						<Link to={"/"+sex+"/"+subCategory} className="dropdown-item">{categories[sex][category][subCategory]}
 						</Link>
 					</li>
 					))}

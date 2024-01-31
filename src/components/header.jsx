@@ -4,35 +4,24 @@ import categories from "../fakeAPI/categories"
 import { Link } from "react-router-dom";
 
 
-const Header = ({customer, onChange, match}) => {
-console.log(match.params.sex)
-console.log(Object.keys(categories))
+const Header = ({match}) => {
 	return (
 		<div className='container mt-3'>
 			<div className="d-flex flex-row justify-content-between">
 				<div>
 					<ul className="nav nav-tabs">
 						<li className="nav-item">
-							<Link to="/female" className={customer.sex === "female" ? "nav-link active" : "nav-link"} aria-current="page" key="female" onClick={() => onChange({sex:"female",
-																																																																																		category:"",
-																																																																																		subCategory:""
-																																																																																	})}>Женщинам</Link>
+							<Link to="/female" className={match.params.sex === "female" ? "nav-link active" : "nav-link"} aria-current="page" key="female">Женщинам</Link>
 						</li>
 						<li className="nav-item">
-							<Link to="/male" className={customer.sex === "male" ? "nav-link active" : "nav-link"} key="male" onClick={() => onChange({sex:"male",
-																																																																			category:"",
-																																																																			subCategory:""
-																																																																		})}>Мужчинам</Link>
+							<Link to="/male" className={match.params.sex === "male" ? "nav-link active" : "nav-link"} key="male">Мужчинам</Link>
 						</li>
 						<li className="nav-item">
-							<Link to="/kids" className={customer.sex === "kids" ? "nav-link active" : "nav-link"} key="kids" onClick={() => onChange({sex:"kids",
-																																																																			category:"",
-																																																																			subCategory:""
-																																																																		})}>Детям</Link>
+							<Link to="/kids" className={match.params.sex === "kids" ? "nav-link active" : "nav-link"} key="kids">Детям</Link>
 						</li>
 					</ul>
 				</div>
-				<div><Link to={"/"+customer.sex}><h1>ONLINE STORE</h1></Link></div>
+				<div><Link className="text-decoration-none text-reset" to={"/"+match.params.sex}><h1>ONLINE STORE</h1></Link></div>
 				<div>
 					<ul className="nav">
 						<li className="nav-item">
@@ -48,8 +37,8 @@ console.log(Object.keys(categories))
 			<div className="container-fluid">
 				<div className="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul className="navbar-nav me-auto mb-2 mb-lg-0">
-						{Object.keys(categories[customer.sex]).map((element) => (
-												<NavbarCategory category={element} key={element} sex={customer.sex} onChange={onChange}/>
+						{Object.keys(categories[match.params.sex]).map((element) => (
+												<NavbarCategory category={element} key={element} sex={match.params.sex}/>
 						))}
 					</ul>
 					<form className="d-flex" role="search">

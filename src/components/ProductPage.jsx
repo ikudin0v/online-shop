@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import catalog from "../fakeAPI/catalog";
+import { Link } from "react-router-dom";
 
-const ProductPage = ({product}) => {
-	console.log (product)
+const ProductPage = ({match}) => {
+	const product = catalog[match.params.product]
 	const [selectedImg, setSelectedImg] = useState(product.img[0])
 	const [selectedSize, setSelectedSize] = useState("")
 
@@ -9,18 +11,25 @@ const ProductPage = ({product}) => {
 		selectedSize === size ? setSelectedSize("") : setSelectedSize(size)
 	}
 
+
 	return (
+		<>
+		<div className="container d-flex flex-row">
+			<Link to={"/" + match.params.sex + "/" + match.params.subCategory} className="btn btn-secondary mt-3">{"<< Назад"}</Link>
+		</div>
 		<div className="container d-flex flex-row">
 			<div className="d-flex w-50 flex-row">
+				{product.img.length !== 1 ? (
 				<div className="d-flex flex-column w-25">
 						{product.img.map((item) => (
 							<div className="d-flex p-3">
 								<img src={item} className="rounded mx-auto d-block" alt="" key={"img"+product.img.indexOf(item)} onClick={() => setSelectedImg(item)}/>
 							</div>
 						))}
-				</div>
+				</div>):null
+				}
 				<div className="d-flex w-75 p-3">
-					<img src={selectedImg} className="d-block rounded d-block h-100" alt="" />
+					<img src={selectedImg} className="d-block rounded d-block w-100" alt="" />
 				</div>
 
 			</div>
@@ -45,6 +54,7 @@ const ProductPage = ({product}) => {
 
 
 		</div>
+		</>
 	)
 }
  
