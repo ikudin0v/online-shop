@@ -4,8 +4,9 @@ import categories from "../fakeAPI/categories"
 import { Link } from "react-router-dom";
 
 
-const Header = ({customer, onChange}) => {
-
+const Header = ({customer, onChange, match}) => {
+console.log(match.params.sex)
+console.log(Object.keys(categories))
 	return (
 		<div className='container mt-3'>
 			<div className="d-flex flex-row justify-content-between">

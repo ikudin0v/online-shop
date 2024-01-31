@@ -4,8 +4,8 @@ import Pagination from './pagination.jsx';
 import Filter from './filter.jsx';
 
 let prevCategory
-const ProductsListPage = ({customer, props}) => {
-	console.log(props)
+const ProductsListPage = ({match}) => {
+
 	const getProductList = (sex, subCategory) => {
 		let productList = []
 		for (let key of Object.keys(catalog)){
@@ -28,16 +28,16 @@ const ProductsListPage = ({customer, props}) => {
 		setCurrentPage(pageIndex)
 	}
 
-	const productList = getProductList(customer.sex, customer.subCategory)
+	const productList = getProductList(match.params.page, match.params.subCategory)
 	const pageSize = 4
 	const [currentPage, setCurrentPage] = useState(1)
 	const [filterColors, setFilterColors] = useState(getColors())
 	const [filteredProductList, setFilteredProductList] = useState(getProductList())
 
-	if (prevCategory !== customer.sex+customer.subCategory){
+	if (prevCategory !== match.params.page+match.params.subCategory){
 		setCurrentPage(1)
-		prevCategory=customer.sex+customer.subCategory
-		setFilteredProductList(getProductList(customer.sex, customer.subCategory))
+		prevCategory=match.params.page+match.params.subCategory
+		setFilteredProductList(getProductList(match.params.page, match.params.subCategory))
 		setFilterColors(getColors())
 	}
 
@@ -46,7 +46,7 @@ const ProductsListPage = ({customer, props}) => {
 		let newFilteredProductList
 		if (color === "clear") {			//очищение фильтра
 			newColors = getColors()
-			newFilteredProductList = getProductList(customer.sex, customer.subCategory)
+			newFilteredProductList = getProductList(match.params.page, match.params.subCategory)
 		} else
 		{ if (filterColors.indexOf(color) !== -1 && filterColors.length !== getColors().length) //Добавление или удаление цвета?
 			{	////удаляем цвет из списка фильтрации
@@ -55,16 +55,16 @@ const ProductsListPage = ({customer, props}) => {
 				if (newColors.length === 0) 
 				{/////////если список пустой
 					newColors = getColors()
-					newFilteredProductList = getProductList(customer.sex, customer.subCategory)
+					newFilteredProductList = getProductList(match.params.page, match.params.subCategory)
 				} else
 				{
-					newFilteredProductList = getProductList(customer.sex, customer.subCategory).filter((item) => newColors.indexOf(item.color) !== -1)
+					newFilteredProductList = getProductList(match.params.page, match.params.subCategory).filter((item) => newColors.indexOf(item.color) !== -1)
 				}
 		}	else ////добавляем цвет в список фильтрации
 			{
 				filterColors.length === getColors().length ? newColors = [] : newColors = filterColors////если фильтр сброшен *(отображается всё), то обнулить список фильтров и потом добавлять уже новый
 				newColors.push(color)
-				newFilteredProductList = getProductList(customer.sex, customer.subCategory).filter((item) => newColors.indexOf(item.color) !== -1)
+				newFilteredProductList = getProductList(match.params.page, match.params.subCategory).filter((item) => newColors.indexOf(item.color) !== -1)
 			}
 		}
 		setFilterColors(newColors)

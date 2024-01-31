@@ -4,7 +4,7 @@ import ProductsListPage from './productsListPage';
 import ProductPage from "./productPage";
 import MainPage from './pageChanger';
 import { Switch } from 'react-router-dom';
-import { Route } from 'react-router-dom/cjs/react-router-dom.min';
+import { Route, Router } from 'react-router-dom/cjs/react-router-dom.min';
 import PageChanger from './pageChanger';
 
 function App() {
@@ -13,9 +13,6 @@ function App() {
 																						category:"Одежда",
 																						subCategory:"underwear"
 																					})
-	const [page, setPage] = useState("main")
-
-
 
 
 	const changeCustomer = (newCustomer) => {
@@ -62,16 +59,18 @@ function App() {
 			}
 		}
 	}
-
+	console.log()
 
 
 
 	return (
 		<div className="App">
-			<Header customer={customer} onChange={changeCustomer}/>
-			<Route path="/:page/:subCategory" render={(props) => <ProductsListPage customer={customer} props={props}/>} />
-			<Route path="/:page" render={(props) => <PageChanger customer={customer} {...props}/>} />
-
+			<Route path="/:sex" render={(props) => <Header customer={customer} onChange={changeCustomer} {...props}/>} />
+			{/* <Header customer={customer} onChange={changeCustomer}/> */}
+			<Switch>
+				<Route path="/:page/:subCategory" render={(props) => <ProductsListPage {...props} />} />
+				<Route path="/:page" render={(props) => <PageChanger customer={customer} {...props}/>} />
+			</Switch>
 			{/* <Route path="/female" render={(props) => <MainPage customer={customer} {...props}/>} />
 			<Route path="/kids" render={(props) => <MainPage customer={customer} {...props}/>} /> */}
 			{/* <Route path="/productList" component={ProductsListPage} />

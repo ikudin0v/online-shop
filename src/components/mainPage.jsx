@@ -11,10 +11,10 @@ const MainPage = ({sex}) => {
 		<div className='container d-flex flex-row'>
 			<div className='d-flex flex-column m-3 w-25'>
 				{Object.keys(categories[sex]).map((category) => (
-					<ul class="list-group m-2">
-						<li class="list-group-item list-group-item-primary">{category}</li>
+					<ul className="list-group m-2">
+						<li className="list-group-item list-group-item-primary">{category}</li>
 						{Object.keys(categories[sex][category]).map((subCategory) => (
-							<li class="list-group-item"><Link to={"/"+sex+"/"+subCategory}>{categories[sex][category][subCategory]}</Link></li>
+							<li className="list-group-item"><Link to={"/"+sex+"/"+subCategory}>{categories[sex][category][subCategory]}</Link></li>
 						))}
 					</ul>
 				))}

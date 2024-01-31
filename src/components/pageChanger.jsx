@@ -1,10 +1,8 @@
 import React from 'react';
 import MainPage from './mainPage';
 
-const PageChanger = ({customer, match}) => {
-	// customer.sex = match.params.page
-	// console.log(match)
-	// console.log(customer.sex)
+const PageChanger = ({match}) => {
+
 
 	if (match.params.page === "male") {
 		return ( <MainPage sex={match.params.page} /> )
