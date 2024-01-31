@@ -1,6 +1,7 @@
 import React from "react";
 import NavbarCategory from "./navbarCategory"
 import categories from "../fakeAPI/categories"
+import { Link } from "react-router-dom";
 
 
 const Header = ({customer, onChange}) => {
@@ -11,26 +12,26 @@ const Header = ({customer, onChange}) => {
 				<div>
 					<ul className="nav nav-tabs">
 						<li className="nav-item">
-							<button className={customer.sex === "female" ? "nav-link active" : "nav-link"} aria-current="page" key="female" onClick={() => onChange({sex:"female",
+							<Link to="/female" className={customer.sex === "female" ? "nav-link active" : "nav-link"} aria-current="page" key="female" onClick={() => onChange({sex:"female",
 																																																																																		category:"",
 																																																																																		subCategory:""
-																																																																																	})}>Женщинам</button>
+																																																																																	})}>Женщинам</Link>
 						</li>
 						<li className="nav-item">
-							<a className={customer.sex === "male" ? "nav-link active" : "nav-link"} key="male" onClick={() => onChange({sex:"male",
+							<Link to="/male" className={customer.sex === "male" ? "nav-link active" : "nav-link"} key="male" onClick={() => onChange({sex:"male",
 																																																																			category:"",
 																																																																			subCategory:""
-																																																																		})}>Мужчинам</a>
+																																																																		})}>Мужчинам</Link>
 						</li>
 						<li className="nav-item">
-							<a className={customer.sex === "kids" ? "nav-link active" : "nav-link"} key="kids" onClick={() => onChange({sex:"kids",
+							<Link to="/kids" className={customer.sex === "kids" ? "nav-link active" : "nav-link"} key="kids" onClick={() => onChange({sex:"kids",
 																																																																			category:"",
 																																																																			subCategory:""
-																																																																		})}>Детям</a>
+																																																																		})}>Детям</Link>
 						</li>
 					</ul>
 				</div>
-				<div><h1>ONLINE STORE</h1></div>
+				<div><Link to={"/"+customer.sex}><h1>ONLINE STORE</h1></Link></div>
 				<div>
 					<ul className="nav">
 						<li className="nav-item">

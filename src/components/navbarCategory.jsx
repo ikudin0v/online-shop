@@ -1,5 +1,6 @@
 import React from "react"
 import categories from "../fakeAPI/categories"
+import { Link } from "react-router-dom";
 
 
 const NavbarCategory = ({category, sex, onChange}) => {
@@ -10,11 +11,11 @@ const NavbarCategory = ({category, sex, onChange}) => {
 			<ul className="dropdown-menu">
 				{Object.keys(categories[sex][category]).map((subCategory) => (
 					<li key={subCategory}>
-						<a className="dropdown-item" onClick={() => onChange({sex:sex,
+						<Link to={"/"+sex+"/"+subCategory} className="dropdown-item" onClick={() => onChange({sex:sex,
 																																										category:category,
 																																										subCategory:subCategory
 																																									})}>{categories[sex][category][subCategory]}
-						</a>
+						</Link>
 					</li>
 					))}
 			</ul>

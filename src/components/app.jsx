@@ -2,6 +2,10 @@ import React, {useState} from 'react';
 import Header from './header';
 import ProductsListPage from './productsListPage';
 import ProductPage from "./productPage";
+import MainPage from './pageChanger';
+import { Switch } from 'react-router-dom';
+import { Route } from 'react-router-dom/cjs/react-router-dom.min';
+import PageChanger from './pageChanger';
 
 function App() {
 
@@ -62,12 +66,18 @@ function App() {
 
 
 
-
 	return (
 		<div className="App">
 			<Header customer={customer} onChange={changeCustomer}/>
+			<Route path="/:page/:subCategory" render={(props) => <ProductsListPage customer={customer} props={props}/>} />
+			<Route path="/:page" render={(props) => <PageChanger customer={customer} {...props}/>} />
+
+			{/* <Route path="/female" render={(props) => <MainPage customer={customer} {...props}/>} />
+			<Route path="/kids" render={(props) => <MainPage customer={customer} {...props}/>} /> */}
+			{/* <Route path="/productList" component={ProductsListPage} />
+			<Route path="/product" component={ProductPage} /> */}
 			{/* <ProductsListPage customer={customer}/> */}
-			<ProductPage product={selectedProduct}/>
+			{/* <ProductPage product={selectedProduct}/> */}
 		</div>
 	);
 }

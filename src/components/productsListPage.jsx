@@ -4,8 +4,8 @@ import Pagination from './pagination.jsx';
 import Filter from './filter.jsx';
 
 let prevCategory
-const ProductsListPage = ({customer}) => {
-
+const ProductsListPage = ({customer, props}) => {
+	console.log(props)
 	const getProductList = (sex, subCategory) => {
 		let productList = []
 		for (let key of Object.keys(catalog)){
