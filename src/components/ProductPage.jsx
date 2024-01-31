@@ -22,13 +22,13 @@ const ProductPage = ({match}) => {
 				{product.img.length !== 1 ? (
 				<div className="d-flex flex-column w-25">
 						{product.img.map((item) => (
-							<div className="d-flex p-3">
-								<img src={item} className="rounded mx-auto d-block" alt="" key={"img"+product.img.indexOf(item)} onClick={() => setSelectedImg(item)}/>
+							<div className="d-flex pt-3">
+								<img src={item} className="rounded d-block" alt="" key={"img"+product.img.indexOf(item)} onClick={() => setSelectedImg(item)}/>
 							</div>
 						))}
 				</div>):null
 				}
-				<div className="d-flex w-75 p-3">
+				<div className="w-75 p-3">
 					<img src={selectedImg} className="d-block rounded d-block w-100" alt="" />
 				</div>
 
