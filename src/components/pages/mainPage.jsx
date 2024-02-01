@@ -1,23 +1,34 @@
-import React from 'react';
-import categories from '../fakeAPI/categories';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 
 const MainPage = ({sex}) => {
+	
 	const sexToRus = {male:"Мужчинам",
 										female:"Женщинам",
 										kids:"Детям",}
 
+	const [categories, setCategories] = useState({})
+
+	useEffect(() => {
+		fetch("https://online-store-45134-default-rtdb.firebaseio.com/categories/"+sex+".json")
+		.then(response => response.json())
+		.then(categories => setCategories(categories))
+	}, [])
+
 	return (
 		<div className='container d-flex flex-row'>
 			<div className='d-flex flex-column m-3 w-25'>
-				{Object.keys(categories[sex]).map((category) => (
-					<ul className="list-group m-2">
-						<li className="list-group-item list-group-item-primary">{category}</li>
-						{Object.keys(categories[sex][category]).map((subCategory) => (
-							<li className="list-group-item list-group-item-action"><Link className="text-decoration-none text-reset"to={"/"+sex+"/"+subCategory}>{categories[sex][category][subCategory]}</Link></li>
-						))}
-					</ul>
-				))}
+				{Object.keys(categories).length !== 0
+					? (Object.keys(categories).reverse().map((category) => (
+							<ul className="list-group m-2">
+								<li className="list-group-item list-group-item-primary">{category}</li>
+								{Object.keys(categories[category]).map((subCategory) => (
+									<li className="list-group-item list-group-item-action" key={sex+subCategory}><Link className="text-decoration-none text-reset"to={"/"+sex+"/"+subCategory}>{categories[category][subCategory]}</Link></li>
+								))}
+							</ul>
+						)))
+					: <></>
+				}
 			</div>
 			<div className='d-flex flex-column m-3 w-75'>
 				<h1>{sexToRus[sex]}</h1>
