@@ -31,7 +31,6 @@ const ProductPage = ({match}) => {
 				<div className="w-75 p-3">
 					<img src={selectedImg} className="d-block rounded d-block w-100" alt="" />
 				</div>
-
 			</div>
 			<div className="container w-50 d-flex flex-column">
 				<div className="fw-bold">{product.name}</div>

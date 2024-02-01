@@ -1,10 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import NavbarCategory from "./navbarCategory"
-import categories from "../fakeAPI/categories"
+// import categories from "../fakeAPI/categories"
 import { Link } from "react-router-dom";
 
 
+// const categories = fetch("https://online-store-45134-default-rtdb.firebaseio.com/categories.json")
+// .then(response => response.json())
+// .then(categories2 => console.log(categories2))
+
+
+
 const Header = ({match}) => {
+	const [categories, setCategories] = useState({})
+
+	fetch("https://online-store-45134-default-rtdb.firebaseio.com/categories.json")
+	.then(response => response.json())
+	.then(categories => setCategories(categories))
+	// .then(categories => console.log(Object.keys(categories[match.params.sex])))
+
+
 	return (
 		<div className='container mt-3'>
 			<div className="d-flex flex-row justify-content-between">
@@ -37,9 +51,12 @@ const Header = ({match}) => {
 			<div className="container-fluid">
 				<div className="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul className="navbar-nav me-auto mb-2 mb-lg-0">
-						{Object.keys(categories[match.params.sex]).map((element) => (
+						{categories === {}
+							? <></>
+							: (Object.keys(categories[match.params.sex]).reverse().map((element) => (
 												<NavbarCategory category={element} key={element} sex={match.params.sex}/>
-						))}
+								)))
+						}
 					</ul>
 					<form className="d-flex" role="search">
 						<input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />

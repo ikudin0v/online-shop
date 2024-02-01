@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import Header from './header';
 import ProductsListPage from './productsListPage';
 import ProductPage from "./productPage";
-import MainPage from './pageChanger';
 import { Switch } from 'react-router-dom';
 import { Route, Router } from 'react-router-dom/cjs/react-router-dom.min';
 import PageChanger from './pageChanger';
