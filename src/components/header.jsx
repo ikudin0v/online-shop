@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import NavbarCategory from "./navbarCategory"
 import { Link } from "react-router-dom";
+import LoginModal from "./loginModal";
 
 const Header = ({match}) => {
-
-	const [categories, setCategories] = useState({})
+	const [categories, setCategories] = useState()
 
 	useEffect(() => {
 		fetch("https://online-store-45134-default-rtdb.firebaseio.com/categories.json")
@@ -14,6 +14,7 @@ const Header = ({match}) => {
 
 	return (
 		<div className='container mt-3'>
+			<LoginModal params={match.params.sex}/>
 			<div className="d-flex flex-row justify-content-between">
 				<div>
 					<ul className="nav nav-tabs">
@@ -30,12 +31,12 @@ const Header = ({match}) => {
 				</div>
 				<div><Link className="text-decoration-none text-reset" to={"/"+match.params.sex}><h1>ONLINE STORE</h1></Link></div>
 				<div>
-					<ul className="nav">
-						<li className="nav-item">
-							<a className="nav-link" aria-current="page">Войти</a>
+					<ul className="nav mx-3">
+						<li className="nav-item mx-3">
+							<button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Вход / Регистрация</button>
 						</li>
 						<li className="nav-item">
-							<a className="nav-link">Корзина</a>
+							<button className="btn btn-primary">Корзина</button>
 						</li>
 					</ul>
 				</div>
@@ -44,7 +45,7 @@ const Header = ({match}) => {
 			<div className="container-fluid">
 				<div className="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul className="navbar-nav me-auto mb-2 mb-lg-0">
-						{Object.keys(categories).length !== 0
+						{categories
 							? (Object.keys(categories[match.params.sex]).reverse().map((element) => (
 								<NavbarCategory category={element} key={element} sex={match.params.sex} subCategories={categories[match.params.sex]}/>)))
 							: <></>

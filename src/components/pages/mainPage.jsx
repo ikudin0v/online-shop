@@ -20,7 +20,7 @@ const MainPage = ({sex}) => {
 			<div className='d-flex flex-column m-3 w-25'>
 				{Object.keys(categories).length !== 0
 					? (Object.keys(categories).reverse().map((category) => (
-							<ul className="list-group m-2">
+							<ul className="list-group m-2" key={category}>
 								<li className="list-group-item list-group-item-primary">{category}</li>
 								{Object.keys(categories[category]).map((subCategory) => (
 									<li className="list-group-item list-group-item-action" key={sex+subCategory}><Link className="text-decoration-none text-reset"to={"/"+sex+"/"+subCategory}>{categories[category][subCategory]}</Link></li>
