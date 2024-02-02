@@ -40,7 +40,7 @@ const ProductPage = ({match}) => {
 						</div>):null
 						}
 						<div className="w-75 p-3">
-							<img src={selectedImg} className="d-block rounded d-block w-100" alt="" />
+							<img src={selectedImg} className="d-block rounded w-100" alt="" />
 						</div>
 					</div>
 					<div className="container w-50 d-flex flex-column">
