@@ -6,21 +6,56 @@ const ProductPage = ({match}) => {
 	const [product, setProduct] = useState({})
 	const [selectedImg, setSelectedImg] = useState("")
 	const [selectedSize, setSelectedSize] = useState("")
-	
-	const getProduct = (product) => {
+	const [noSelectedSize, setNoSelectedSize] = useState(false)
+	const [cart, setCart] = useState()
+	const [inCart, setInCart] = useState()
+
+	const getData = (product) => {
 		setProduct(product)
 		setSelectedImg(product.img[0])
+		if (localStorage.cart === undefined) {
+			setCart({})
+			localStorage.setItem("cart", '{}')	
+		} else {
+			setCart(JSON.parse(localStorage.cart))
+		}
+		Object.keys(JSON.parse(localStorage.cart)).indexOf(product.manufacturerCode) === -1 ? setInCart(false) : setInCart(true)
 	}
+
 
 	useEffect(() => {
 		fetch("https://online-store-45134-default-rtdb.firebaseio.com/catalog/"+match.params.sex+"/"+match.params.subCategory+"/"+match.params.product+".json")
 		.then(response => response.json())
-		.then(product => getProduct(product))
+		.then(product => getData(product))
 	}, [])
 
 	const handleSelectSize = (size) => {
 		selectedSize === size ? setSelectedSize("") : setSelectedSize(size)
+		setNoSelectedSize(false)
 	}
+
+	const handleAddToCart = () => {
+		let newCart = cart
+		if (cart[product.manufacturerCode] === undefined) {
+			if (selectedSize === "") {
+				setNoSelectedSize(true)
+			 } else {
+				newCart[product.manufacturerCode] = selectedSize
+				setCart(newCart)
+				setInCart(true)
+				setSelectedSize("")
+				setNoSelectedSize(false)
+			 }
+		} else {
+			delete newCart[product.manufacturerCode]
+			setCart(newCart)
+			setInCart(false)
+			setSelectedSize("")
+			setNoSelectedSize(false)
+		}
+		localStorage.setItem("cart", JSON.stringify(newCart))
+	}
+
 
 	return (
 		<>
@@ -34,7 +69,7 @@ const ProductPage = ({match}) => {
 						<div className="d-flex flex-column w-25">
 								{product.img.map((item) => (
 									<div className="d-flex pt-3" key={"img" + product.img.indexOf(item)}>
-										<img src={item} className="rounded d-block" alt="" key={"img"+product.img.indexOf(item)} onClick={() => setSelectedImg(item)}/>
+										<img src={item} className={item === selectedImg ? "rounded d-block border border-3 border-primary" : "rounded d-block"} alt="" key={"img"+product.img.indexOf(item)} onClick={() => setSelectedImg(item)}/>
 									</div>
 								))}
 						</div>):null
@@ -44,19 +79,19 @@ const ProductPage = ({match}) => {
 						</div>
 					</div>
 					<div className="container w-50 d-flex flex-column">
-						<div className="fw-bold">{product.name}</div>
-						<div>{product.price + " Р"}</div>
-						<div>{"Цвет: " + product.color}</div>
-						<div>Размеры:</div>
-						<nav aria-label="Page navigation example">
-							<ul className="pagination">
+						<div className="fw-bold mt-3">{product.name}</div>
+						<div className="mt-3">{product.price + " Р"}</div>
+						<div className="mt-3">{"Цвет: " + product.color}</div>
+						<div className="mt-3">Размеры:</div>
+						<nav className={"d-flex"}aria-label="Page navigation example">
+							<ul className={noSelectedSize===false?"pagination":"pagination border border-2 rounded border-danger"}>
 								{Object.keys(product.size).map((item) => (
 								<li className={product.size[item].availability === "В наличии" ? (selectedSize===item?"page-item active":"page-item"):"page-item disabled"}  key={item}><a className="page-link" href="#" onClick={() => handleSelectSize(item)}>{item}</a></li>
 								))}
 							</ul>
 						</nav>
-						<button type="button" className="btn btn-primary">В корзину</button>
-						<div className="fw-bold">Описание:</div>
+						<button type="button mt-3" className="btn btn-primary" onClick={()=>handleAddToCart()}>{inCart === true ? "Товар уже в корзине. Удалить из корзины?" : "В корзину"}</button>
+						<div className="fw-bold mt-3">Описание:</div>
 						<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
 					</div>
 				</div>

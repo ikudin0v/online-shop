@@ -6,11 +6,14 @@ import LoginModal from "./loginModal";
 const Header = ({match}) => {
 	const [categories, setCategories] = useState()
 
+
 	useEffect(() => {
 		fetch("https://online-store-45134-default-rtdb.firebaseio.com/categories.json")
 		.then(response => response.json())
 		.then(categories => setCategories(categories))
 	}, [])
+
+
 
 	return (
 		<div className='container mt-3'>
