@@ -5,6 +5,7 @@ import LoginModal from "./loginModal";
 
 const Header = ({match}) => {
 	const [categories, setCategories] = useState()
+	const [cart, setCart] = useState(JSON.parse(localStorage.cart))
 
 
 	useEffect(() => {
@@ -13,6 +14,10 @@ const Header = ({match}) => {
 		.then(categories => setCategories(categories))
 	}, [])
 
+	useEffect(() => {
+		setCart(JSON.parse(localStorage.cart))
+		console.log(JSON.parse(localStorage.cart))
+	}, [localStorage.cart])
 
 
 	return (
@@ -39,7 +44,7 @@ const Header = ({match}) => {
 							<button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Вход / Регистрация</button>
 						</li>
 						<li className="nav-item">
-							<button className="btn btn-primary">Корзина</button>
+							<button className="btn btn-primary">{Object.keys(cart).length === 0 ? "Корзина (пусто)" : "Корзина (" + Object.keys(cart).length + ")"}</button>
 						</li>
 					</ul>
 				</div>

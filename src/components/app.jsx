@@ -8,12 +8,15 @@ import PolicyPage from './pages/policyPage';
 
 function App() {
 
+	const [cart, setCart] = useState(JSON.parse(localStorage.cart))
+
 	return (
 		<div className="App">
 			<Route path="/:sex" render={(props) => <Header {...props}/>} />
 			<Switch>
 				<Route path="/:sex/policy" render={(props) => <PolicyPage {...props} />} />
-				<Route path="/:sex/:subCategory/:product" render={(props) => <ProductPage {...props} />} />
+				<Route path="/:sex/:subCategory/:product" render={(props) => <ProductPage onCartChange={() => setCart(JSON.parse(localStorage.cart))}
+																																									{...props} />} />
 				<Route path="/:page/:subCategory" render={(props) => <ProductsListPage {...props} />} />
 				<Route path="/:page" render={(props) => <PageChanger {...props}/>} />
 			</Switch>
