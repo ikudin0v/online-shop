@@ -44,7 +44,7 @@ const Header = ({match}) => {
 							<button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Вход / Регистрация</button>
 						</li>
 						<li className="nav-item">
-							<button className="btn btn-primary">{Object.keys(cart).length === 0 ? "Корзина (пусто)" : "Корзина (" + Object.keys(cart).length + ")"}</button>
+							<div className="btn btn-primary"><Link to={"/"+match.params.sex+"/cart"} className={"text-decoration-none text-reset"}>{Object.keys(cart).length === 0 ? "Корзина (пусто)" : "Корзина (" + Object.keys(cart).length + ")"}</Link></div>
 						</li>
 					</ul>
 				</div>
@@ -59,9 +59,9 @@ const Header = ({match}) => {
 							: <></>
 						}
 					</ul>
-					<form className="d-flex" role="search">
-						<input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-						<button className="btn btn-outline-success" type="submit">Search</button>
+					<form className="d-flex col-md-3" role="search">
+						<input className="form-control me-2" type="search" placeholder="введите название товара" aria-label="Search" />
+						<button className="btn btn-outline-primary" type="submit">Поиск</button>
 					</form>
 				</div>
 			</div>

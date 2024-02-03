@@ -12,6 +12,7 @@ const ProductPage = ({match, onCartChange}) => {
 
 	const getData = (product) => {
 		setProduct(product)
+		console.log(product)
 		setSelectedImg(product.img[0])
 		if (localStorage.cart === undefined) {
 			setCart({})
@@ -40,7 +41,9 @@ const ProductPage = ({match, onCartChange}) => {
 			if (selectedSize === "") {
 				setNoSelectedSize(true)
 			 } else {
-				newCart[product.manufacturerCode] = selectedSize
+				newCart[product.manufacturerCode] = {product:product,
+																						size:selectedSize,
+																						quantity:1}
 				setInCart(true)
 				setNoSelectedSize(false)
 			 }

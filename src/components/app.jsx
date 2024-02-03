@@ -5,6 +5,7 @@ import ProductPage from "./pages/productPage";
 import { Route, Switch } from 'react-router-dom';
 import PageChanger from './pageChanger';
 import PolicyPage from './pages/policyPage';
+import CartPage from './pages/cartPage';
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
 			<Route path="/:sex" render={(props) => <Header {...props}/>} />
 			<Switch>
 				<Route path="/:sex/policy" render={(props) => <PolicyPage {...props} />} />
+				<Route path="/:sex/cart" render={() => <CartPage onCartChange={() => setCart(JSON.parse(localStorage.cart))} />} />
 				<Route path="/:sex/:subCategory/:product" render={(props) => <ProductPage onCartChange={() => setCart(JSON.parse(localStorage.cart))}
 																																									{...props} />} />
 				<Route path="/:page/:subCategory" render={(props) => <ProductsListPage {...props} />} />
