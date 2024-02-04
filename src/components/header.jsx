@@ -2,10 +2,13 @@ import React, { useEffect, useState } from "react";
 import NavbarCategory from "./navbarCategory"
 import { Link } from "react-router-dom";
 import LoginModal from "./loginModal";
+import FuzzySearch from 'fuzzy-search';
 
 const Header = ({match}) => {
 	const [categories, setCategories] = useState()
 	const [cart, setCart] = useState(JSON.parse(localStorage.cart))
+	const [productsForSearch, setProductsForSearch] = useState([])
+	const [findedProducts, setFindedProducts] = useState([])
 
 
 	useEffect(() => {
@@ -13,12 +16,26 @@ const Header = ({match}) => {
 		.then(response => response.json())
 		.then(categories => setCategories(categories))
 	}, [])
+	
+	useEffect(() => {
+		fetch("https://online-store-45134-default-rtdb.firebaseio.com/productsForSearch.json")
+		.then(response => response.json())
+		.then(products => setProductsForSearch(products))
+	}, [])
 
 	useEffect(() => {
 		setCart(JSON.parse(localStorage.cart))
-		console.log(JSON.parse(localStorage.cart))
 	}, [localStorage.cart])
 
+	const search = () => {
+		if (document.getElementById("searchInput").value.length >= 3) {
+			const searcher = new FuzzySearch(productsForSearch, ['name'], {
+				caseSensitive: false,
+			});
+			const result = searcher.search(document.getElementById("searchInput").value);
+			setFindedProducts(result)
+		} else {setFindedProducts([])}
+	}
 
 	return (
 		<div className='container mt-3'>
@@ -59,10 +76,20 @@ const Header = ({match}) => {
 							: <></>
 						}
 					</ul>
-					<form className="d-flex col-md-3" role="search">
-						<input className="form-control me-2" type="search" placeholder="введите название товара" aria-label="Search" />
-						<button className="btn btn-outline-primary" type="submit">Поиск</button>
-					</form>
+					<div className="d-flex col-md-3">
+						<input className="form-control me-2" type="search" id="searchInput" placeholder="введите название товара" onChange={() => search()}/>
+						{findedProducts.length > 0
+						?<div className="position-absolute mt-5 p-2 overflow-y-scroll bg-white shadow rounded" style={{height: 50 + "vh"}}>
+							{findedProducts.map((item) => (
+								<div className="d-flex flex-row bg-white " key={item.manufacturerCode}>
+									<img src={item.img} className="img-fluid col-md-2 m-1 rounded" alt="" />
+									<div className="col-md-9 fs-4 m-2">{item.name}</div>
+								</div>
+							))}
+							</div>
+						: null}
+						<button className="btn btn-outline-primary" onClick={() => search()}>Поиск</button>
+					</div>
 				</div>
 			</div>
 		</nav>
