@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import NavbarCategory from "./navbarCategory"
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import LoginModal from "./loginModal";
 import FuzzySearch from 'fuzzy-search';
 
@@ -9,7 +9,7 @@ const Header = ({match}) => {
 	const [cart, setCart] = useState(JSON.parse(localStorage.cart))
 	const [productsForSearch, setProductsForSearch] = useState([])
 	const [findedProducts, setFindedProducts] = useState([])
-
+	const navigate = useHistory()
 
 	useEffect(() => {
 		fetch("https://online-store-45134-default-rtdb.firebaseio.com/categories.json")
@@ -27,7 +27,7 @@ const Header = ({match}) => {
 		setCart(JSON.parse(localStorage.cart))
 	}, [localStorage.cart])
 
-	const search = () => {
+	const liveSearch = () => {
 		if (document.getElementById("searchInput").value.length >= 3) {
 			const searcher = new FuzzySearch(productsForSearch, ['name'], {
 				caseSensitive: false,
@@ -35,6 +35,11 @@ const Header = ({match}) => {
 			const result = searcher.search(document.getElementById("searchInput").value);
 			setFindedProducts(result)
 		} else {setFindedProducts([])}
+	}
+
+	const handleSearch = () => {
+		if (document.getElementById("searchInput").value.length >= 3)
+		{navigate.push("/" + match.params.sex + "/search?searchReq=" + document.getElementById("searchInput").value)}
 	}
 
 	return (
@@ -77,18 +82,24 @@ const Header = ({match}) => {
 						}
 					</ul>
 					<div className="d-flex col-md-3">
-						<input className="form-control me-2" type="search" id="searchInput" placeholder="введите название товара" onChange={() => search()}/>
+						<input	className="form-control me-2"
+										type="search" id="searchInput"
+										placeholder="введите название товара"
+										onChange={() => liveSearch()}
+										onFocus={() => liveSearch()}
+										onBlur={() => setTimeout(() => setFindedProducts([]), 500)}
+										onKeyDown={(e) => e.keyCode === 13 ? handleSearch() : null}/>
 						{findedProducts.length > 0
-						?<div className="position-absolute mt-5 p-2 overflow-y-scroll bg-white shadow rounded" style={{height: 50 + "vh"}}>
+						?<div className="z-3 position-absolute mt-5 p-2 overflow-y-scroll bg-white shadow rounded liveSearchItem" style={{maxHeight: 50 + "vh"}}>
 							{findedProducts.map((item) => (
-								<div className="d-flex flex-row bg-white " key={item.manufacturerCode}>
+								<div className="d-flex flex-row bg-white liveSearchItem" key={item.link.split("/")[2]}>
 									<img src={item.img} className="img-fluid col-md-2 m-1 rounded" alt="" />
-									<div className="col-md-9 fs-4 m-2">{item.name}</div>
+									<div className="col-md-9 fs-4 m-2 liveSearchItem"><Link to={"/" +item.link} className={"text-decoration-none text-reset liveSearchItem"}>{item.name}</Link></div>
 								</div>
 							))}
 							</div>
 						: null}
-						<button className="btn btn-outline-primary" onClick={() => search()}>Поиск</button>
+						<button className="btn btn-outline-primary" onClick={() => handleSearch()}>Поиск</button>
 					</div>
 				</div>
 			</div>

@@ -11,8 +11,8 @@ const ProductPage = ({match, onCartChange}) => {
 	const [inCart, setInCart] = useState()
 
 	const getData = (product) => {
+		console.log(match)
 		setProduct(product)
-		console.log(product)
 		setSelectedImg(product.img[0])
 		if (localStorage.cart === undefined) {
 			setCart({})
@@ -28,7 +28,7 @@ const ProductPage = ({match, onCartChange}) => {
 		fetch("https://online-store-45134-default-rtdb.firebaseio.com/catalog/"+match.params.sex+"/"+match.params.subCategory+"/"+match.params.product+".json")
 		.then(response => response.json())
 		.then(product => getData(product))
-	}, [])
+	}, [match])
 
 	const handleSelectSize = (size) => {
 		selectedSize === size ? setSelectedSize("") : setSelectedSize(size)
@@ -105,11 +105,11 @@ const ProductPage = ({match, onCartChange}) => {
 								{Object.keys(product.size).map((item) => (
 								<li	className={product.size[item].availability === "В наличии" ? (selectedSize===item?"page-item active":"page-item"):"page-item disabled"}
 										key={item}>
-									<a	className="page-link"
-											href="#"
+									<p	className="page-link cursor-pointer"
+											role="button"
 											onClick={() => handleSelectSize(item)}>
 										{item}
-									</a>
+									</p>
 								</li>
 								))}
 							</ul>
