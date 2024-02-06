@@ -1,7 +1,71 @@
-import React from 'react';
-import { Link } from 'react-router-dom/cjs/react-router-dom.min';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import _ from 'lodash';
 
 const LoginModal = ({params}) => {
+	// const [loginData, setLoginData] = useState({email:"", password:""})
+	const [registrationData, setRegistrationData] = useState({name:"", email:"", phone:"", password:"", subscribe:false})
+	const [errors, setErrors] = useState({registrationName:false, registrationEmail:false, registrationPhone:false, registrationPassword:false, registrationConfirmPassowrd:false})
+
+	const validate = (field, data) => {
+		let newErrors = _.cloneDeep(errors)
+		let newRegistrationData = _.cloneDeep(registrationData)
+		if (field === "registrationName") {
+			String(data).trim().match(/^[a-zA-Zа-яА-Я- ]+[a-zA-Zа-яА-Я- ]+[a-zA-Zа-яА-Я]{1,40}$/)
+				? newErrors[field] = false
+				: newErrors[field] = true
+			newRegistrationData.name = String(data).trim()
+			setRegistrationData(newRegistrationData)
+			setErrors(newErrors)
+		}
+		if (field === "registrationEmail") {
+			String(data).trim().toLowerCase().match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
+				? newErrors[field] = false
+				: newErrors[field] = true
+			newRegistrationData.email = String(data).trim()
+			setRegistrationData(newRegistrationData)
+			setErrors(newErrors)
+			}
+		if (field === "registrationPhone") {
+			String(data).toLowerCase().match(/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/)
+				? newErrors[field] = false
+				: newErrors[field] = true
+			newRegistrationData.phone = String(data).trim()
+			setRegistrationData(newRegistrationData)
+			setErrors(newErrors)
+		}
+		if (field === "registrationPassword") {
+			String(data).match(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)
+				? newErrors[field] = false
+				: newErrors[field] = true
+			newRegistrationData.password = data
+			setRegistrationData(newRegistrationData)
+			setErrors(newErrors)
+		}
+		if (field === "registrationConfirmPassword") {
+			registrationData.password === data
+				? newErrors[field] = false
+				: newErrors[field] = true
+			setErrors(newErrors)
+		}
+	}
+
+	const handleSubscribe = () => {
+		let newRegistrationData = _.cloneDeep(registrationData)
+		newRegistrationData.subscribe = !newRegistrationData.subscribe
+		setRegistrationData(newRegistrationData)
+	}
+
+	const handleRegistration = () => {
+		if (!errors.registrationName && !errors.registrationEmail && !errors.registrationPhone && !errors.registrationPassword && !errors.registrationConfirmPassowrd) {
+			console.log("Заебись")
+		} else {
+			console.log("Хуйня")
+		}
+	}
+
+	useEffect(() => console.log(registrationData), [registrationData])
+
 	return (
 		<div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div className="modal-dialog">
@@ -38,30 +102,30 @@ const LoginModal = ({params}) => {
 							<div className="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabIndex="0">
 								<div className="m-1">
 									<label htmlFor="exampleFormControlInput1" className="form-label">Введите своё имя</label>
-									<input type="text" className="form-control" id="registerName" placeholder="Иван" />
+									<input type="text" className={!errors.registrationName?"form-control":"form-control border border-danger" } id="registrationName" placeholder="Иван"  onBlur={(e) => validate(e.target.id, e.target.value)}/>
 								</div>
 								<div className="m-1">
 									<label htmlFor="exampleFormControlInput1" className="form-label">Введите свой Email</label>
-									<input type="email" className="form-control" id="registerEmail" placeholder="name@example.com" />
+									<input type="email" className={!errors.registrationEmail?"form-control":"form-control border border-danger" } id="registrationEmail" placeholder="name@example.com" onBlur={(e) => validate(e.target.id, e.target.value)}/>
 								</div>
 								<div className="m-1">
 									<label htmlFor="exampleFormControlInput1" className="form-label">Введите свой номер телефона</label>
-									<input type="tel" className="form-control" id="registerPhone" placeholder="+7 (123) 456-78-90" />
+									<input type="tel" className={!errors.registrationPhone?"form-control":"form-control border border-danger" } id="registrationPhone" placeholder="+7 (123) 456-78-90"  onBlur={(e) => validate(e.target.id, e.target.value)}/>
 								</div>
 								<div className="m-1">
-									<label htmlFor="exampleFormControlInput1" className="form-label">Введите пароль</label>
-									<input type="password" className="form-control" id="registerPassword" placeholder="**********" />
+									<label htmlFor="exampleFormControlInput1" className="form-label">Придумайте пароль (строчные, заглавные буквы и цифры, от 8 символов)</label>
+									<input type="password" className={!errors.registrationPassword?"form-control":"form-control border border-danger" } id="registrationPassword" placeholder="**********"  onBlur={(e) => validate(e.target.id, e.target.value)}/>
 								</div>
 								<div className="m-1">
 									<label htmlFor="exampleFormControlInput1" className="form-label">Подтвердите пароль</label>
-									<input type="password" className="form-control" id="registerConfirmPassword" placeholder="**********" />
+									<input type="password" className={!errors.registrationConfirmPassword?"form-control":"form-control border border-danger" } id="registrationConfirmPassword" placeholder="**********"  onBlur={(e) => validate(e.target.id, e.target.value)}/>
 								</div>
 								<div className="form-check m-2">
-									<input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+									<input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" onChange={() => handleSubscribe()}/>
 									<label className="form-check-label" htmlFor="flexCheckDefault">Подписаться на новости и скидки</label>
 								</div>
 								<div className="m-1">
-									<button type="button" className="btn btn-primary w-100">Зарегистрироваться</button>
+									<button type="button" className="btn btn-primary w-100" onClick={handleRegistration}>Зарегистрироваться</button>
 								</div>
 								<label className="form-check-label m-1" htmlFor="flexCheckDefault">Нажимая кнопку "Зарегистрироваться", Вы соглашаетесь
 																																				c условиями <Link to={"/"+params+"/policy"}>политики конфиденциальности</Link></label>
