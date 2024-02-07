@@ -10,7 +10,7 @@ const Header = ({match}) => {
 	const [cart, setCart] = useState(JSON.parse(localStorage.cart))
 	const [productsForSearch, setProductsForSearch] = useState([])
 	const [findedProducts, setFindedProducts] = useState([])
-	const navigate = useHistory()
+	const history = useHistory()
 
 	useEffect(() => {
 		axios.get("https://online-store-45134-default-rtdb.firebaseio.com/categories.json")
@@ -38,7 +38,7 @@ const Header = ({match}) => {
 
 	const handleSearch = () => {
 		if (document.getElementById("searchInput").value.length >= 3)
-		{navigate.push("/" + match.params.sex + "/search?searchReq=" + document.getElementById("searchInput").value)}
+		{history.push("/" + match.params.sex + "/search?searchReq=" + document.getElementById("searchInput").value)}
 	}
 
 	return (

@@ -1,5 +1,7 @@
 import React, { useContext, useState } from 'react';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AuthContext = React.createContext()
 
@@ -22,12 +24,19 @@ const AuthProvider = ({ children }) => {
 	}
 
 	async function signUp( {email, password, name, phone, subscribe} ){
-		// const key = "AIzaSyAoqM_zMzxteuNHJvoLsqOawc6-Njt3eNc"
+
+		try {
 		const url = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key="+process.env.REACT_APP_FIREBASE_KEY
 		const { data } = await axios.post(url, {email, password, returnSecureToken:true})
 		setToknes(data)
 		await createUser({id:data.localId, name:name, email:email, phone:phone, subscribe:subscribe, cart:localStorage.cart })
 		console.log(data)
+		}
+		catch (error) {
+			console.log(error.response.data.error.message)
+			toast.error(error.response.data.error.message);
+		}
+		
 	}
 
 	async function createUser(userData){
@@ -37,6 +46,7 @@ const AuthProvider = ({ children }) => {
 	return (
 		<AuthContext.Provider value={ {signUp, currentUser} }>
 			{children}
+			<ToastContainer />
 		</AuthContext.Provider>
 	)
 }

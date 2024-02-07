@@ -1,20 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import _ from 'lodash';
 import { useAuth } from './useAuth';
+import { toast } from 'react-toastify';
+import { Modal } from 'bootstrap';
 
 const LoginModal = ({params}) => {
 	// const [loginData, setLoginData] = useState({email:"", password:""})
 	const [registrationData, setRegistrationData] = useState({name:"", email:"", phone:"", password:"", subscribe:false})
 	const [errors, setErrors] = useState({registrationName:false, registrationEmail:false, registrationPhone:false, registrationPassword:false, registrationConfirmPassowrd:false})
 	const {signUp} = useAuth()
+	const history = useHistory()
+	// const loginModal = new Modal(document.querySelector('#exampleModal'))
+
 	const validate = (field, data) => {
 		let newErrors = _.cloneDeep(errors)
 		let newRegistrationData = _.cloneDeep(registrationData)
 		if (field === "registrationName") {
 			String(data).trim().match(/^[a-zA-Zа-яА-Я- ]+[a-zA-Zа-яА-Я- ]+[a-zA-Zа-яА-Я]{1,40}$/)
 				? newErrors[field] = false
-				: newErrors[field] = true
+				: newErrors[field] = true && toast.error("Неверно введено ФИО, используйте русские или латинские буквы и дефис, максимум 3 слова")
 			newRegistrationData.name = String(data).trim()
 			setRegistrationData(newRegistrationData)
 			setErrors(newErrors)
@@ -22,7 +27,7 @@ const LoginModal = ({params}) => {
 		if (field === "registrationEmail") {
 			String(data).trim().toLowerCase().match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
 				? newErrors[field] = false
-				: newErrors[field] = true
+				: newErrors[field] = true && toast.error("email должен быть в формате user@onlinestore.com")
 			newRegistrationData.email = String(data).trim()
 			setRegistrationData(newRegistrationData)
 			setErrors(newErrors)
@@ -30,7 +35,7 @@ const LoginModal = ({params}) => {
 		if (field === "registrationPhone") {
 			String(data).toLowerCase().match(/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/)
 				? newErrors[field] = false
-				: newErrors[field] = true
+				: newErrors[field] = true && toast.error("Номер телефона указан в неверном формате, используйте формат +71234567890 или 81234567890")
 			newRegistrationData.phone = String(data).trim()
 			setRegistrationData(newRegistrationData)
 			setErrors(newErrors)
@@ -38,7 +43,7 @@ const LoginModal = ({params}) => {
 		if (field === "registrationPassword") {
 			String(data).match(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)
 				? newErrors[field] = false
-				: newErrors[field] = true
+				: newErrors[field] = true && toast.error("Пароль должен состоять из строчных, заглавных латинских символов и цифр")
 			newRegistrationData.password = data
 			setRegistrationData(newRegistrationData)
 			setErrors(newErrors)
@@ -46,7 +51,7 @@ const LoginModal = ({params}) => {
 		if (field === "registrationConfirmPassword") {
 			registrationData.password === data
 				? newErrors[field] = false
-				: newErrors[field] = true
+				: newErrors[field] = true && toast.error("Пароли не совпадают")
 			setErrors(newErrors)
 		}
 	}
@@ -60,10 +65,14 @@ const LoginModal = ({params}) => {
 	const handleRegistration = () => {
 		if (!errors.registrationName && !errors.registrationEmail && !errors.registrationPhone && !errors.registrationPassword && !errors.registrationConfirmPassowrd) {
 			signUp(registrationData)
+			// document.querySelector('#exampleModal').modal("hide")
+			// document.querySelector("#exampleModal").
+			// loginModal.hide()
+			history.push("/")
 		}
 	}
 
-	// useEffect(() => console.log(registrationData), [registrationData])
+	// useEffect(() => {}, [history])
 
 	return (
 		<div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -94,7 +103,7 @@ const LoginModal = ({params}) => {
 									<input type="email" className="form-control" id="loginPassword" placeholder="**********" />
 								</div>
 								<div className="m-1">
-									<button type="button" className="btn btn-primary w-100">Войти</button>
+									<button type="button" className="btn btn-primary w-100" data-bs-dismiss="modal">Войти</button>
 								</div>
 							</div>
 
@@ -124,7 +133,7 @@ const LoginModal = ({params}) => {
 									<label className="form-check-label" htmlFor="flexCheckDefault">Подписаться на новости и скидки</label>
 								</div>
 								<div className="m-1">
-									<button type="button" className="btn btn-primary w-100" onClick={handleRegistration}>Зарегистрироваться</button>
+									<button type="button" className="btn btn-primary w-100" data-bs-dismiss="modal" onClick={handleRegistration}>Зарегистрироваться</button>
 								</div>
 								<label className="form-check-label m-1" htmlFor="flexCheckDefault">Нажимая кнопку "Зарегистрироваться", Вы соглашаетесь
 																																				c условиями <Link to={"/"+params+"/policy"}>политики конфиденциальности</Link></label>
