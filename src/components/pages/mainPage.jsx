@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
+import axios from 'axios';
 
 const MainPage = ({sex}) => {
 	
@@ -10,9 +11,8 @@ const MainPage = ({sex}) => {
 	const [categories, setCategories] = useState({})
 
 	useEffect(() => {
-		fetch("https://online-store-45134-default-rtdb.firebaseio.com/categories/"+sex+".json")
-		.then(response => response.json())
-		.then(categories => setCategories(categories))
+		axios.get("https://online-store-45134-default-rtdb.firebaseio.com/categories/"+sex+".json")
+		.then(categories => setCategories(categories.data))
 	}, [])
 
 	return (

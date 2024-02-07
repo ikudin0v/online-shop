@@ -3,6 +3,7 @@ import NavbarCategory from "./navbarCategory"
 import { Link, useHistory } from "react-router-dom";
 import LoginModal from "./loginModal";
 import FuzzySearch from 'fuzzy-search';
+import axios from 'axios';
 
 const Header = ({match}) => {
 	const [categories, setCategories] = useState()
@@ -12,15 +13,13 @@ const Header = ({match}) => {
 	const navigate = useHistory()
 
 	useEffect(() => {
-		fetch("https://online-store-45134-default-rtdb.firebaseio.com/categories.json")
-		.then(response => response.json())
-		.then(categories => setCategories(categories))
+		axios.get("https://online-store-45134-default-rtdb.firebaseio.com/categories.json")
+		.then(categories => setCategories(categories.data))
 	}, [])
 	
 	useEffect(() => {
-		fetch("https://online-store-45134-default-rtdb.firebaseio.com/productsForSearch.json")
-		.then(response => response.json())
-		.then(products => setProductsForSearch(products))
+		axios.get("https://online-store-45134-default-rtdb.firebaseio.com/productsForSearch.json")
+		.then(products => setProductsForSearch(products.data))
 	}, [])
 
 	useEffect(() => {

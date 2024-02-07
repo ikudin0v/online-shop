@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from 'axios';
 
 const ProductPage = ({match, onCartChange}) => {
 
@@ -14,20 +15,14 @@ const ProductPage = ({match, onCartChange}) => {
 		console.log(match)
 		setProduct(product)
 		setSelectedImg(product.img[0])
-		if (localStorage.cart === undefined) {
-			setCart({})
-			localStorage.setItem("cart", '{}')	
-		} else {
-			setCart(JSON.parse(localStorage.cart))
-		}
+		setCart(JSON.parse(localStorage.cart))
 		Object.keys(JSON.parse(localStorage.cart)).indexOf(product.manufacturerCode) === -1 ? setInCart(false) : setInCart(true)
 	}
 
 
 	useEffect(() => {
-		fetch("https://online-store-45134-default-rtdb.firebaseio.com/catalog/"+match.params.sex+"/"+match.params.subCategory+"/"+match.params.product+".json")
-		.then(response => response.json())
-		.then(product => getData(product))
+		axios.get("https://online-store-45134-default-rtdb.firebaseio.com/catalog/"+match.params.sex+"/"+match.params.subCategory+"/"+match.params.product+".json")
+		.then(product => getData(product.data))
 	}, [match])
 
 	const handleSelectSize = (size) => {

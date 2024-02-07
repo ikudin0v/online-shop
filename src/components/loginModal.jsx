@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
+import { useAuth } from './useAuth';
 
 const LoginModal = ({params}) => {
 	// const [loginData, setLoginData] = useState({email:"", password:""})
 	const [registrationData, setRegistrationData] = useState({name:"", email:"", phone:"", password:"", subscribe:false})
 	const [errors, setErrors] = useState({registrationName:false, registrationEmail:false, registrationPhone:false, registrationPassword:false, registrationConfirmPassowrd:false})
-
+	const {signUp} = useAuth()
 	const validate = (field, data) => {
 		let newErrors = _.cloneDeep(errors)
 		let newRegistrationData = _.cloneDeep(registrationData)
@@ -58,13 +59,11 @@ const LoginModal = ({params}) => {
 
 	const handleRegistration = () => {
 		if (!errors.registrationName && !errors.registrationEmail && !errors.registrationPhone && !errors.registrationPassword && !errors.registrationConfirmPassowrd) {
-			console.log("Заебись")
-		} else {
-			console.log("Хуйня")
+			signUp(registrationData)
 		}
 	}
 
-	useEffect(() => console.log(registrationData), [registrationData])
+	// useEffect(() => console.log(registrationData), [registrationData])
 
 	return (
 		<div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

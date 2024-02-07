@@ -4,6 +4,7 @@ import query from 'query-string';
 import FuzzySearch from 'fuzzy-search';
 import Pagination from '../pagination';
 import _ from 'lodash';
+import axios from 'axios';
 
 const SearchPage = ({match, location}) => {
 
@@ -20,9 +21,8 @@ const SearchPage = ({match, location}) => {
 	}
 
 	useEffect(() => {
-		fetch("https://online-store-45134-default-rtdb.firebaseio.com/productsForSearch.json")
-		.then(response => response.json())
-		.then(products => getFindedProducts(products))
+		axios.get("https://online-store-45134-default-rtdb.firebaseio.com/productsForSearch.json")
+		.then(products => getFindedProducts(products.data))
 	}, [])
 
 

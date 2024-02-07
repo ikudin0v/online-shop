@@ -7,23 +7,33 @@ import PageChanger from './pageChanger';
 import PolicyPage from './pages/policyPage';
 import CartPage from './pages/cartPage';
 import SearchPage from './pages/searchPage';
+import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
+import AuthProvider from './useAuth';
 
 function App() {
 
-	const [cart, setCart] = useState(JSON.parse(localStorage.cart))
+	if (localStorage.cart === undefined) {
+		localStorage.setItem("cart", "{}")
+	}
+
+	const [, setCart] = useState(JSON.parse(localStorage.cart))
+
 
 	return (
 		<div className="App">
-			<Route path="/:sex" render={(props) => <Header {...props}/>} />
-			<Switch>
-				<Route path="/:sex/search" render={(props) => <SearchPage {...props} />} />
-				<Route path="/:sex/policy" render={(props) => <PolicyPage {...props} />} />
-				<Route path="/:sex/cart" render={() => <CartPage onCartChange={() => setCart(JSON.parse(localStorage.cart))} />} />
-				<Route path="/:sex/:subCategory/:product" render={(props) => <ProductPage onCartChange={() => setCart(JSON.parse(localStorage.cart))}
-																																									{...props} />} />
-				<Route path="/:page/:subCategory" render={(props) => <ProductsListPage {...props} />} />
-				<Route path="/:page" render={(props) => <PageChanger {...props}/>} />
-			</Switch>
+			<AuthProvider>
+				<Route path="/:sex" render={(props) => <Header {...props}/>} />
+				<Switch>
+					<Route path="/:sex/search" render={(props) => <SearchPage {...props} />} />
+					<Route path="/:sex/policy" render={(props) => <PolicyPage {...props} />} />
+					<Route path="/:sex/cart" render={() => <CartPage onCartChange={() => setCart(JSON.parse(localStorage.cart))} />} />
+					<Route path="/:sex/:subCategory/:product" render={(props) => <ProductPage onCartChange={() => setCart(JSON.parse(localStorage.cart))}
+																																										{...props} />} />
+					<Route path="/:page/:subCategory" render={(props) => <ProductsListPage {...props} />} />
+					<Route path="/:page" render={(props) => <PageChanger {...props}/>} />
+					<Redirect from="/" to="/female" />
+				</Switch>
+			</AuthProvider>
 		</div>
 	);
 }

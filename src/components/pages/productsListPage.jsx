@@ -3,6 +3,7 @@ import Pagination from '../pagination.jsx';
 import Filter from '../filter.jsx';
 import { Link } from "react-router-dom";
 import _ from 'lodash';
+import axios from 'axios';
 
 let prevCategory
 
@@ -38,9 +39,8 @@ const ProductsListPage = ({match}) => {
 	}
 	
 	useEffect(() => {
-		fetch("https://online-store-45134-default-rtdb.firebaseio.com/catalog/"+match.params.page+"/"+match.params.subCategory+".json")
-		.then(response => response.json())
-		.then(products => makeProductList(products))
+		axios.get("https://online-store-45134-default-rtdb.firebaseio.com/catalog/"+match.params.page+"/"+match.params.subCategory+".json")
+		.then(products => makeProductList(products.data))
 	}, [prevCategory])
 
 	const handlePageChange = (pageIndex) => {
