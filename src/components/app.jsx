@@ -27,8 +27,7 @@ function App() {
 					<Route path="/:sex/search" render={(props) => <SearchPage {...props} />} />
 					<Route path="/:sex/policy" render={(props) => <PolicyPage {...props} />} />
 					<Route path="/:sex/cart" render={() => <CartPage onCartChange={() => setCart(JSON.parse(localStorage.cart))} />} />
-					<Route path="/:sex/:subCategory/:product" render={(props) => <ProductPage onCartChange={() => setCart(JSON.parse(localStorage.cart))}
-																																										{...props} />} />
+					<Route path="/:sex/:subCategory/:product" render={(props) => <ProductPage onCartChange={() => setCart(JSON.parse(localStorage.cart))} {...props} />} />
 					<Route path="/:page/:subCategory" render={(props) => <ProductsListPage {...props} />} />
 					<Route path="/:page" render={(props) => <PageChanger {...props}/>} />
 					<Redirect from="/" to="/female" />

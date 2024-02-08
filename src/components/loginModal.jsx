@@ -1,21 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import _ from 'lodash';
 import { useAuth } from './useAuth';
 import { toast } from 'react-toastify';
-import { Modal } from 'bootstrap';
+
 
 const LoginModal = ({params}) => {
-	// const [loginData, setLoginData] = useState({email:"", password:""})
+	const [loginData, setLoginData] = useState({email:"", password:""})
 	const [registrationData, setRegistrationData] = useState({name:"", email:"", phone:"", password:"", subscribe:false})
 	const [errors, setErrors] = useState({registrationName:false, registrationEmail:false, registrationPhone:false, registrationPassword:false, registrationConfirmPassowrd:false})
-	const {signUp} = useAuth()
+	const {signUp, logIn} = useAuth()
 	const history = useHistory()
-	// const loginModal = new Modal(document.querySelector('#exampleModal'))
+
 
 	const validate = (field, data) => {
 		let newErrors = _.cloneDeep(errors)
+		let newLoginData = _.cloneDeep(loginData)
 		let newRegistrationData = _.cloneDeep(registrationData)
+		if (field === "loginEmail") {
+			newLoginData.email = String(data).trim()
+			setLoginData(newLoginData)
+		}
+		if (field === "loginPassword") {
+			newLoginData.password = String(data).trim()
+			setLoginData(newLoginData)
+		}
 		if (field === "registrationName") {
 			String(data).trim().match(/^[a-zA-Zа-яА-Я- ]+[a-zA-Zа-яА-Я- ]+[a-zA-Zа-яА-Я]{1,40}$/)
 				? newErrors[field] = false
@@ -65,14 +74,17 @@ const LoginModal = ({params}) => {
 	const handleRegistration = () => {
 		if (!errors.registrationName && !errors.registrationEmail && !errors.registrationPhone && !errors.registrationPassword && !errors.registrationConfirmPassowrd) {
 			signUp(registrationData)
-			// document.querySelector('#exampleModal').modal("hide")
-			// document.querySelector("#exampleModal").
-			// loginModal.hide()
 			history.push("/")
 		}
 	}
 
-	// useEffect(() => {}, [history])
+	const handleLogIn = () => {
+		if (loginData.email !== "" && loginData.password !== "") {
+			logIn(loginData)
+			history.push("/")
+		}
+	}
+
 
 	return (
 		<div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -96,14 +108,14 @@ const LoginModal = ({params}) => {
 							<div className="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabIndex="0">
 								<div className="m-1">
 									<label htmlFor="exampleFormControlInput1" className="form-label">Введите свой Email</label>
-									<input type="text" className="form-control" id="loginEmail" placeholder="name@example.com" />
+									<input type="email" className="form-control" id="loginEmail" placeholder="name@example.com" onBlur={(e) => validate(e.target.id, e.target.value)}/>
 								</div>
 								<div className="m-1">
 									<label htmlFor="exampleFormControlInput1" className="form-label">Введите пароль</label>
-									<input type="email" className="form-control" id="loginPassword" placeholder="**********" />
+									<input type="password" className="form-control" id="loginPassword" placeholder="**********" onBlur={(e) => validate(e.target.id, e.target.value)}/>
 								</div>
 								<div className="m-1">
-									<button type="button" className="btn btn-primary w-100" data-bs-dismiss="modal">Войти</button>
+									<button type="button" className="btn btn-primary w-100" data-bs-dismiss="modal" onClick={handleLogIn}>Войти</button>
 								</div>
 							</div>
 
