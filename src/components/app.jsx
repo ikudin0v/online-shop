@@ -18,7 +18,6 @@ function App() {
 
 	const [, setCart] = useState(JSON.parse(localStorage.cart))
 
-
 	return (
 		<div className="App">
 			<AuthProvider>

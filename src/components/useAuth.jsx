@@ -13,7 +13,6 @@ const TOKEN_KEY = "jwt_token"
 const REFRESH_KEY = "jwt_refresh_token"
 const EXPIRES_KEY = "jwt_expires"
 const USERID_KEY = "user_local_id"
-console.log("dkjfnbjksdnbj")
 
 const AuthProvider = ({ children }) => {
 	const [currentUser, setCurrentUser] = useState({})
@@ -48,6 +47,13 @@ const AuthProvider = ({ children }) => {
 			toast.error(error.response.data.error.message);
 		}
 	}
+	function logOut() {
+		setCurrentUser({})
+		localStorage.removeItem(USERID_KEY)
+		localStorage.removeItem(TOKEN_KEY)
+		localStorage.removeItem(REFRESH_KEY)
+		localStorage.removeItem(EXPIRES_KEY)
+	}
 
 	async function createUser(userData){
 		await axios.put("https://online-store-45134-default-rtdb.firebaseio.com/users/" + userData.id + ".json", userData)
@@ -57,7 +63,10 @@ const AuthProvider = ({ children }) => {
 		await axios.get("https://online-store-45134-default-rtdb.firebaseio.com/users/" + userId + ".json")
 		.then(userData => setCurrentUser(userData.data))
 	}
-
+	
+	if (localStorage.user_local_id !== undefined) {
+		getUserData(localStorage.user_local_id)
+	}
 	// useEffect(() => {
 	// 	if (localStorage[USERID_KEY]) {
 
@@ -65,7 +74,7 @@ const AuthProvider = ({ children }) => {
 	// })
 
 	return (
-		<AuthContext.Provider value={ {signUp, logIn, currentUser} }>
+		<AuthContext.Provider value={ {signUp, logIn, logOut, getUserData, currentUser} }>
 			{children}
 			<ToastContainer />
 		</AuthContext.Provider>

@@ -4,6 +4,7 @@ import { Link, useHistory } from "react-router-dom";
 import LoginModal from "./loginModal";
 import FuzzySearch from 'fuzzy-search';
 import axios from 'axios';
+import { useAuth } from './useAuth';
 
 const Header = ({match}) => {
 	const [categories, setCategories] = useState()
@@ -11,6 +12,7 @@ const Header = ({match}) => {
 	const [productsForSearch, setProductsForSearch] = useState([])
 	const [findedProducts, setFindedProducts] = useState([])
 	const history = useHistory()
+	const {currentUser, logOut} = useAuth()
 
 	useEffect(() => {
 		axios.get("https://online-store-45134-default-rtdb.firebaseio.com/categories.json")
@@ -62,7 +64,21 @@ const Header = ({match}) => {
 				<div>
 					<ul className="nav mx-3">
 						<li className="nav-item mx-3">
-							<button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Вход / Регистрация</button>
+							{currentUser === undefined || Object.keys(currentUser).length === 0
+							? <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Вход / Регистрация</button>
+							: <div className="dropdown">
+									<a className="nav-link dropdown-toggle fs-5" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+										<i className="bi bi-person-circle " style={{color: "gray", fontSize: 1.5+"rem"}}></i>
+										{" "+currentUser.name}
+									</a>
+										
+									<ul className="dropdown-menu">
+										<li><a className="dropdown-item" href="#">Мои заказы</a></li>
+										<li><a className="dropdown-item" href="#" onClick={logOut}>Выйти</a></li>
+									</ul>
+								</div>
+
+							}
 						</li>
 						<li className="nav-item">
 							<div className="btn btn-primary"><Link to={"/"+match.params.sex+"/cart"} className={"text-decoration-none text-reset"}>{Object.keys(cart).length === 0 ? "Корзина (пусто)" : "Корзина (" + Object.keys(cart).length + ")"}</Link></div>
