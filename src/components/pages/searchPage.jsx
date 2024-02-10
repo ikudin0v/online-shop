@@ -6,7 +6,7 @@ import Pagination from '../pagination';
 import _ from 'lodash';
 import axios from 'axios';
 
-const SearchPage = ({match, location}) => {
+const SearchPage = ({location}) => {
 
 	const [findedProducts, setFindedProducts] = useState([])
 	const [currentPage, setCurrentPage] = useState(1)

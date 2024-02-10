@@ -28,6 +28,8 @@ const Header = ({match}) => {
 		setCart(JSON.parse(localStorage.cart))
 	}, [localStorage.cart])
 
+	useEffect(() => {}, [currentUser])
+
 	const liveSearch = () => {
 		if (document.getElementById("searchInput").value.length >= 3) {
 			const searcher = new FuzzySearch(productsForSearch, ['name'], {

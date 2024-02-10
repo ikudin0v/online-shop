@@ -4,7 +4,6 @@ import _ from 'lodash';
 import { useAuth } from './useAuth';
 import { toast } from 'react-toastify';
 
-
 const LoginModal = ({params}) => {
 	const [loginData, setLoginData] = useState({email:"", password:""})
 	const [registrationData, setRegistrationData] = useState({name:"", email:"", phone:"", password:"", subscribe:false})
@@ -84,7 +83,6 @@ const LoginModal = ({params}) => {
 			history.push("/")
 		}
 	}
-
 
 	return (
 		<div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
