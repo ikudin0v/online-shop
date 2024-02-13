@@ -102,7 +102,7 @@ const ProductsListPage = ({match}) => {
 						</select>
 					</div>
 				</div>
-				<div className="container d-flex flex-row justify-content-around">
+				<div className="container d-flex flex-row justify-content-start">
 					<Filter filterColors={filterColors} colors={colors} onColorChange={handleFilterChange}/>
 					<div className="row mx-4">
 						<Pagination productCount={filteredProductList.length} pageSize={pageSize} onPageChange={handlePageChange} currentPage={currentPage}/>
