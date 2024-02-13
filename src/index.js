@@ -8,8 +8,8 @@ import { BrowserRouter, HashRouter} from 'react-router-dom/cjs/react-router-dom.
 
 const root = createRoot(document.getElementById("root"))
 root.render(
-	<HashRouter>
+	<BrowserRouter basename={process.env.PUBLIC_URL}>
 		<App />
-	</HashRouter>
+	</BrowserRouter>
 );
 

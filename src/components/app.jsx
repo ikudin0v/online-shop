@@ -29,7 +29,9 @@ function App() {
 					<Route path="/:sex/:subCategory/:product" render={(props) => <ProductPage onCartChange={() => setCart(JSON.parse(localStorage.cart))} {...props} />} />
 					<Route path="/:page/:subCategory" render={(props) => <ProductsListPage {...props} />} />
 					<Route path="/:page" render={(props) => <PageChanger {...props}/>} />
+
 					<Redirect from="/" to="/female" />
+					<Route path="" />
 				</Switch>
 			</AuthProvider>
 		</div>
