@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import NavbarCategory from "./navbarCategory"
+import NavbarCategory from "../components/navbarCategory"
 import { Link, useHistory } from "react-router-dom";
 import LoginModal from "./loginModal";
 import FuzzySearch from 'fuzzy-search';
 import axios from 'axios';
-import { useAuth } from './useAuth';
+import { useAuth } from '../hooks/useAuth';
 
 const Header = ({match}) => {
 	const [categories, setCategories] = useState()
@@ -88,7 +88,7 @@ const Header = ({match}) => {
 					</ul>
 				</div>
 			</div>
-			<nav className="navbar navbar-expand-lg bg-body-tertiary">
+			<nav className="navbar navbar-expand bg-body-tertiary">
 			<div className="container-fluid">
 				<div className="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul className="navbar-nav me-auto mb-2 mb-lg-0">

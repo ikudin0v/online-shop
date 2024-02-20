@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Pagination from '../pagination.jsx';
-import Filter from '../filter.jsx';
+import Pagination from '../components/pagination';
+import Filter from '../components/filter';
 import { Link } from "react-router-dom";
 import _ from 'lodash';
 import axios from 'axios';

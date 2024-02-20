@@ -4,9 +4,16 @@
   "private": true,
   "homepage": "https://ikudin0v.github.io/online-shop/",
   "dependencies": {
+		"@babel/plugin-proposal-private-property-in-object": "10.2.5",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/lodash": "^4.14.202",
+    "@types/node": "^16.18.82",
+    "@types/react": "^18.2.57",
+    "@types/react-dom": "^18.2.19",
+    "@types/react-router-dom": "^5.3.3",
     "axios": "^1.6.7",
     "bootstrap": "^5.3.2",
     "bootstrap-icons": "^1.11.3",
@@ -19,6 +26,7 @@
     "react-router-dom": "^5.3.4",
     "react-scripts": "5.0.1",
     "react-toastify": "^10.0.4",
+    "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -26,8 +34,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-		"deploy": "gh-pages -d build",
-		"predeploy": "npm run build"
+    "deploy": "gh-pages -d build",
+    "predeploy": "npm run build"
   },
   "eslintConfig": {
     "extends": [

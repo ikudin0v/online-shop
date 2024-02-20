@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import query from 'query-string';
 import FuzzySearch from 'fuzzy-search';
-import Pagination from '../pagination';
+import Pagination from '../components/pagination';
 import _ from 'lodash';
 import axios from 'axios';
 

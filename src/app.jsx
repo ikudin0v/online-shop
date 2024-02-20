@@ -1,14 +1,14 @@
 import React, {useState} from 'react';
-import Header from './header';
-import ProductsListPage from './pages/productsListPage';
-import ProductPage from "./pages/productPage";
+import Header from './layouts/header';
+import ProductsListPage from './layouts/productsList';
+import ProductPage from "./layouts/product";
 import { Route, Switch } from 'react-router-dom';
-import PageChanger from './pageChanger';
-import PolicyPage from './pages/policyPage';
-import CartPage from './pages/cartPage';
-import SearchPage from './pages/searchPage';
+import PolicyPage from './layouts/policy';
+import CartPage from './layouts/cart';
+import SearchPage from './layouts/search';
 import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
-import AuthProvider from './useAuth';
+import AuthProvider from './hooks/useAuth';
+import MainPage from './layouts/main';
 
 function App() {
 
@@ -28,7 +28,7 @@ function App() {
 					<Route path="/:sex/cart" render={() => <CartPage onCartChange={() => setCart(JSON.parse(localStorage.cart))} />} />
 					<Route path="/:sex/:subCategory/:product" render={(props) => <ProductPage onCartChange={() => setCart(JSON.parse(localStorage.cart))} {...props} />} />
 					<Route path="/:page/:subCategory" render={(props) => <ProductsListPage {...props} />} />
-					<Route path="/:page" render={(props) => <PageChanger {...props}/>} />
+					<Route path="/:page" render={(props) => <MainPage sex={props.match.params.page}/>} />
 
 					<Redirect from="/" to="/female" />
 					<Route path="" />

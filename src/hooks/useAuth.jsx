@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {generateAuthError} from "../utils/generateAuthErrors"
 
 const AuthContext = React.createContext()
 
@@ -33,7 +34,7 @@ const AuthProvider = ({ children }) => {
 		setCurrentUser({id:data.localId, name:name, email:email, phone:phone, subscribe:subscribe, cart:localStorage.cart, orders:[]})
 		}
 		catch (error) {
-			toast.error(error.response.data.error.message);
+			toast.error(generateAuthError(error.response.data.error.message));
 		}
 	}
 
@@ -44,7 +45,7 @@ const AuthProvider = ({ children }) => {
 			setToknes(data)
 			await getUserData(data.localId)
 		} catch (error) {
-			toast.error(error.response.data.error.message);
+			toast.error(generateAuthError(error.response.data.error.message));
 		}
 	}
 	function logOut() {
