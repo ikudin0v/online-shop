@@ -47,7 +47,7 @@ const Header = ({match}) => {
 
 	return (
 		<div className='container mt-3'>
-			<LoginModal params={match.params.sex}/>
+			<LoginModal sex={match.params.sex}/>
 			<div className="d-flex flex-row justify-content-between">
 				<div>
 					<ul className="nav nav-tabs">

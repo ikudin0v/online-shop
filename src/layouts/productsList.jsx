@@ -4,6 +4,8 @@ import Filter from '../components/filter';
 import { Link } from "react-router-dom";
 import _ from 'lodash';
 import axios from 'axios';
+import { paginate } from '../utils/paginate';
+import { filter } from '../utils/filter';
 
 let prevCategory
 
@@ -48,33 +50,9 @@ const ProductsListPage = ({match}) => {
 	}
 
 	const handleFilterChange = (color) => {
-		let newColors
-		let newFilteredProductList
-		if (color === "clear") {			//очищение фильтра
-			newColors = colors
-			newFilteredProductList = productList
-		} else
-		{ if (filterColors.indexOf(color) !== -1 && filterColors.length !== colors.length) //Добавление или удаление цвета?
-			{	////удаляем цвет из списка фильтрации
-				newColors = filterColors
-				newColors = newColors.filter((item) => item !== color)
-				if (newColors.length === 0) 
-				{/////////если список пустой
-					newColors = colors
-					newFilteredProductList = productList
-				} else
-				{
-					newFilteredProductList = productList.filter((item) => newColors.indexOf(item.color) !== -1)
-				}
-		}	else ////добавляем цвет в список фильтрации
-			{
-				filterColors.length === colors.length ? newColors = [] : newColors = filterColors////если фильтр сброшен *(отображается всё), то обнулить список фильтров и потом добавлять уже новый
-				newColors.push(color)
-				newFilteredProductList = productList.filter((item) => newColors.indexOf(item.color) !== -1)
-			}
-		}
-		setFilterColors(newColors)
-		setFilteredProductList(newFilteredProductList)
+		const filterData = filter(productList, colors, filteredProductList, filterColors, color)
+		setFilterColors(filterData.filterItems)
+		setFilteredProductList(filterData.filteredList)
 		setCurrentPage(1)
 	}
 
@@ -102,22 +80,24 @@ const ProductsListPage = ({match}) => {
 						</select>
 					</div>
 				</div>
-				<div className="container d-flex flex-row justify-content-start">
+				<div className="container d-flex flex-row align-items-start">
 					<Filter filterColors={filterColors} colors={colors} onColorChange={handleFilterChange}/>
-					<div className="row mx-4">
+					<div className="row mx-4 justify-content-start">
 						<Pagination productCount={filteredProductList.length} pageSize={pageSize} onPageChange={handlePageChange} currentPage={currentPage}/>
-						{filteredProductList.slice((currentPage-1)*pageSize,(currentPage-1)*pageSize+pageSize).map((item) => (
-							<div className="col m-3" key={item.manufacturerCode}>
-								<div className="card text-center h-90" style={{width: "18rem"}} >
-									<img src={item.img[0]} className="card-img-top" alt="..." />
-									<div className="card-body">
-										<h5 className="card-title">{item.name}</h5>
-										<p className="card-text">{item.price} Р</p>
-										<Link to={"/" + match.params.page + "/" + match.params.subCategory + "/" + item.manufacturerCode} className="btn btn-primary">Подробнее</Link>
+						<div className="d-flex flex-row align-content-start align-items-start flex-wrap justify-content-start">
+							{paginate(filteredProductList, currentPage, pageSize).map((item) => (
+									<div className="col m-3" key={item.manufacturerCode}>
+										<div className="card text-center h-90" style={{width: "18rem"}} >
+											<img src={item.img[0]} className="card-img-top" alt="..." />
+											<div className="card-body">
+												<h5 className="card-title">{item.name}</h5>
+												<p className="card-text">{item.price} Р</p>
+												<Link to={"/" + match.params.page + "/" + match.params.subCategory + "/" + item.manufacturerCode} className="btn btn-primary">Подробнее</Link>
+											</div>
+										</div>
 									</div>
-								</div>
-							</div>
-						))}
+							))}
+						</div>
 						<Pagination productCount={filteredProductList.length} pageSize={pageSize} onPageChange={handlePageChange} currentPage={currentPage}/>
 					</div>
 				</div>

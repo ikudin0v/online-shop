@@ -4,7 +4,11 @@ import _ from 'lodash';
 import { useAuth } from '../hooks/useAuth';
 import { validate } from '../utils/validator';
 
-const LoginModal = ({params}) => {
+interface ModalProps {
+	sex: any
+}
+
+const LoginModal = ({sex}:ModalProps) => {
 	const [loginData, setLoginData] = useState({email:"", password:""})
 	const [registrationData, setRegistrationData] = useState({registrationName:"", registrationEmail:"", registrationPhone:"", registrationPassword:"", subscribe:false})
 	const [errors, setErrors] = useState({registrationName:false, registrationEmail:false, registrationPhone:false, registrationPassword:false, registrationConfirmPassword:false})
@@ -24,7 +28,7 @@ const LoginModal = ({params}) => {
 	}
 
 	return (
-		<div className="modal fade" id="exampleModal" tabIndex="-1" aria-hidden="true">
+		<div className="modal fade" id="exampleModal" tabIndex={-1} aria-hidden="true">
 			<div className="modal-dialog">
 				<div className="modal-content">
 					<div className="modal-header">
@@ -42,7 +46,7 @@ const LoginModal = ({params}) => {
 						</ul>
 						<div className="tab-content" id="myTabContent">
 
-							<div className="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabIndex="0">
+							<div className="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabIndex={0}>
 								<div className="m-1">
 									<label htmlFor="exampleFormControlInput1" className="form-label">Введите свой Email</label>
 									<input	type="email"
@@ -60,11 +64,11 @@ const LoginModal = ({params}) => {
 													onBlur={(e) => setLoginData({...loginData, password:e.target.value})}/>
 								</div>
 								<div className="m-1">
-									<button type="button" className="btn btn-primary w-100" data-bs-dismiss="modal" onClick={handleLogIn}>Войти</button>
+									<button type="button" className="btn btn-primary w-100" data-bs-dismiss="modal" disabled={loginData.email === "" || loginData.password === "" ? true : false} onClick={handleLogIn}>Войти</button>
 								</div>
 							</div>
 
-							<div className="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabIndex="0">
+							<div className="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabIndex={0}>
 								<div className="m-1">
 									<label htmlFor="exampleFormControlInput1" className="form-label">Введите своё имя</label>
 									<input	type="text"
@@ -119,14 +123,14 @@ const LoginModal = ({params}) => {
 													disabled={!errors.registrationName && !errors.registrationEmail && !errors.registrationPhone && !errors.registrationPassword &&
 																		!errors.registrationConfirmPassword && registrationData.registrationName !== "" && registrationData.registrationEmail !== "" &&
 																		registrationData.registrationPhone !== "" && registrationData.registrationPassword !== "" &&
-																		document.querySelector("#registrationConfirmPassword").value !== ""? false : true}
+																		(document.querySelector("#registrationConfirmPassword") as HTMLInputElement).value !== ""? false : true}
 													data-bs-dismiss="modal"
 													onClick={handleRegistration}>
 										Зарегистрироваться
 									</button>
 								</div>
 								<label className="form-check-label m-1" htmlFor="flexCheckDefault">Нажимая кнопку "Зарегистрироваться", Вы соглашаетесь
-																																				c условиями <Link to={"/"+params+"/policy"}>политики конфиденциальности</Link></label>
+																																				c условиями <Link to={"/"+sex+"/policy"}>политики конфиденциальности</Link></label>
 							</div>
 						</div>
 					</div>
