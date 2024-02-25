@@ -6,7 +6,7 @@ import { Route, Switch } from 'react-router-dom';
 import PolicyPage from './layouts/policy';
 import CartPage from './layouts/cart';
 import SearchPage from './layouts/search';
-import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
+import { Redirect } from 'react-router-dom';
 import AuthProvider from './hooks/useAuth';
 import MainPage from './layouts/main';
 
@@ -24,7 +24,7 @@ function App() {
 				<Route path="/:sex" render={(props) => <Header {...props}/>} />
 				<Switch>
 					<Route path="/:sex/search" render={(props) => <SearchPage {...props} />} />
-					<Route path="/:sex/policy" render={(props) => <PolicyPage {...props} />} />
+					<Route path="/:sex/policy" render={(props) => <PolicyPage />} />
 					<Route path="/:sex/cart" render={() => <CartPage onCartChange={() => setCart(JSON.parse(localStorage.cart))} />} />
 					<Route path="/:sex/:subCategory/:product" render={(props) => <ProductPage onCartChange={() => setCart(JSON.parse(localStorage.cart))} {...props} />} />
 					<Route path="/:page/:subCategory" render={(props) => <ProductsListPage {...props} />} />

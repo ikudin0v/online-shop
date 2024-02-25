@@ -6,23 +6,28 @@ import FuzzySearch from 'fuzzy-search';
 import axios from 'axios';
 import { useAuth } from '../hooks/useAuth';
 
-const Header = ({match}) => {
+interface HeaderProps {
+	match:any
+}
+
+const Header = ({match}:HeaderProps) => {
 	const [categories, setCategories] = useState()
 	const [cart, setCart] = useState(JSON.parse(localStorage.cart))
 	const [productsForSearch, setProductsForSearch] = useState([])
 	const [findedProducts, setFindedProducts] = useState([])
 	const history = useHistory()
 	const {currentUser, logOut} = useAuth()
+	const searchInput = (document.getElementById("searchInput") as HTMLInputElement)
 
 	useEffect(() => {
 		axios.get("https://online-store-45134-default-rtdb.firebaseio.com/categories.json")
 		.then(categories => setCategories(categories.data))
 	}, [])
-	
+
 	useEffect(() => {
-		axios.get("https://online-store-45134-default-rtdb.firebaseio.com/productsForSearch.json")
-		.then(products => setProductsForSearch(products.data))
-	}, [])
+	axios.get("https://online-store-45134-default-rtdb.firebaseio.com/productsForSearch.json")
+	.then(products => setProductsForSearch(products.data))
+}, [])
 
 	useEffect(() => {
 		setCart(JSON.parse(localStorage.cart))
@@ -31,18 +36,18 @@ const Header = ({match}) => {
 	useEffect(() => {}, [currentUser])
 
 	const liveSearch = () => {
-		if (document.getElementById("searchInput").value.length >= 3) {
+		if (searchInput?.value.length >= 3) {
 			const searcher = new FuzzySearch(productsForSearch, ['name'], {
 				caseSensitive: false,
 			});
-			const result = searcher.search(document.getElementById("searchInput").value);
+			const result = searcher.search(searchInput?.value);
 			setFindedProducts(result)
 		} else {setFindedProducts([])}
 	}
 
 	const handleSearch = () => {
-		if (document.getElementById("searchInput").value.length >= 3)
-		{history.push("/" + match.params.sex + "/search?searchReq=" + document.getElementById("searchInput").value)}
+		if (searchInput?.value.length >= 3)
+		{history.push("/" + match.params.sex + "/search?searchReq=" + searchInput.value)}
 	}
 
 	return (
@@ -79,7 +84,6 @@ const Header = ({match}) => {
 										<li><a className="dropdown-item" href="#" onClick={logOut}>Выйти</a></li>
 									</ul>
 								</div>
-
 							}
 						</li>
 						<li className="nav-item">
@@ -108,7 +112,7 @@ const Header = ({match}) => {
 										onKeyDown={(e) => e.keyCode === 13 ? handleSearch() : null}/>
 						{findedProducts.length > 0
 						?<div className="z-3 position-absolute mt-5 p-2 overflow-y-scroll bg-white shadow rounded liveSearchItem" style={{maxHeight: 50 + "vh"}}>
-							{findedProducts.map((item) => (
+							{findedProducts.map((item:any) => (
 								<div className="d-flex flex-row bg-white liveSearchItem" key={item.link.split("/")[2]}>
 									<img src={item.img} className="img-fluid col-md-2 m-1 rounded" alt="" />
 									<div className="col-md-9 fs-4 m-2 liveSearchItem"><Link to={"/" +item.link} className={"text-decoration-none text-reset liveSearchItem"}>{item.name}</Link></div>

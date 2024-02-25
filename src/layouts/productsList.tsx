@@ -6,29 +6,34 @@ import _ from 'lodash';
 import axios from 'axios';
 import { paginate } from '../utils/paginate';
 import { filter } from '../utils/filter';
+import ProductCard from '../components/ProductCard';
 
-let prevCategory
+interface ProductsListPageProps {
+	match:any
+}
 
-const ProductsListPage = ({match}) => {
+let prevCategory:any
+
+const ProductsListPage = ({match}:ProductsListPageProps) => {
 
 	const pageSize = 16
-	const [currentPage, setCurrentPage] = useState(1)
-	const [productList, setProductList] = useState([])
-	const [colors, setColors] = useState([])
-	const [filterColors, setFilterColors] = useState([])
-	const [filteredProductList, setFilteredProductList] = useState([])
+	const [currentPage, setCurrentPage] = useState<number>(1)
+	const [productList, setProductList] = useState<[]>([])
+	const [colors, setColors] = useState<(string|undefined)[]>([])
+	const [filterColors, setFilterColors] = useState<(string|undefined)[]>([])
+	const [filteredProductList, setFilteredProductList] = useState<[]>([])
 
-	const getColors = (products) => {
-		let newColors = []
-		products.map((product) => {
+	const getColors = (products:any[]):(string|undefined)[] => {
+		let newColors:(string|undefined)[] = []
+		products.map((product:any) => {
 			if (newColors.indexOf(product.color) === -1) {newColors.push(product.color)}
 		})
 		return(newColors)
 	}
 
-	const makeProductList = (products) => {
-		let newProductList = []
-		Object.keys(products).map((item) => newProductList.push(products[item]))
+	const makeProductList = (products:[]) => {
+		let newProductList:[] = []
+		Object.keys(products).map((item:any) => newProductList.push(products[item]))
 		setProductList(newProductList)
 		setColors(getColors(newProductList))
 		setFilteredProductList(newProductList)
@@ -45,23 +50,23 @@ const ProductsListPage = ({match}) => {
 		.then(products => makeProductList(products.data))
 	}, [prevCategory])
 
-	const handlePageChange = (pageIndex) => {
+	const handlePageChange = (pageIndex:number) => {
 		setCurrentPage(pageIndex)
 	}
 
-	const handleFilterChange = (color) => {
-		const filterData = filter(productList, colors, filteredProductList, filterColors, color)
+	const handleFilterChange = (color:string) => {
+		const filterData:any = filter(productList, colors, filteredProductList, filterColors, color)
 		setFilterColors(filterData.filterItems)
 		setFilteredProductList(filterData.filteredList)
 		setCurrentPage(1)
 	}
 
-	const sortBy = (event) => {
-		let newFilteredProductList
+	const sortBy = (event:any) => {
+		let newFilteredProductList:any
 		if (event.target.value === "default") {
-			newFilteredProductList = productList.filter((item) => filterColors.indexOf(item.color) !== -1)
+			newFilteredProductList = productList.filter((item:any) => filterColors.indexOf(item.color) !== -1)
 		} else {
-			newFilteredProductList = _.orderBy(productList.filter((item) => filterColors.indexOf(item.color) !== -1), ['price'], event.target.value)
+			newFilteredProductList = _.orderBy(productList.filter((item:any) => filterColors.indexOf(item.color) !== -1), ['price'], event.target.value)
 		}
 		setFilteredProductList(newFilteredProductList)
 	}
@@ -85,17 +90,8 @@ const ProductsListPage = ({match}) => {
 					<div className="row mx-4 justify-content-start">
 						<Pagination productCount={filteredProductList.length} pageSize={pageSize} onPageChange={handlePageChange} currentPage={currentPage}/>
 						<div className="d-flex flex-row align-content-start align-items-start flex-wrap justify-content-start">
-							{paginate(filteredProductList, currentPage, pageSize).map((item) => (
-									<div className="col m-3" key={item.manufacturerCode}>
-										<div className="card text-center h-90" style={{width: "18rem"}} >
-											<img src={item.img[0]} className="card-img-top" alt="..." />
-											<div className="card-body">
-												<h5 className="card-title">{item.name}</h5>
-												<p className="card-text">{item.price} Р</p>
-												<Link to={"/" + match.params.page + "/" + match.params.subCategory + "/" + item.manufacturerCode} className="btn btn-primary">Подробнее</Link>
-											</div>
-										</div>
-									</div>
+							{paginate(filteredProductList, currentPage, pageSize).map((item:any) => (
+								<ProductCard product={item} link={"/" + match.params.page + "/" + match.params.subCategory + "/" + item.manufacturerCode} key={item.manufacturerCode}/>
 							))}
 						</div>
 						<Pagination productCount={filteredProductList.length} pageSize={pageSize} onPageChange={handlePageChange} currentPage={currentPage}/>

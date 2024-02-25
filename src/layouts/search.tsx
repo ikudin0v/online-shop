@@ -1,22 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import query from 'query-string';
-import FuzzySearch from 'fuzzy-search';
+import FuzzySearch from 'fuzzy-search'
 import Pagination from '../components/pagination';
-import _ from 'lodash';
+// import _ from 'lodash';
 import axios from 'axios';
+import { paginate } from '../utils/paginate';
 
-const SearchPage = ({location}) => {
+interface SearchProps {
+	location:any
+}
 
-	const [findedProducts, setFindedProducts] = useState([])
+const SearchPage = ({location}:SearchProps) => {
+
+	const [findedProducts, setFindedProducts] = useState<[]>([])
 	const [currentPage, setCurrentPage] = useState(1)
-	const pageSize = 24
+	const pageSize:number = 24
 
-	const getFindedProducts = (products) => {
+	const getFindedProducts = (products:any) => {
 		const searcher = new FuzzySearch(products, ["name"], {
 			caseSensitive: false,
 		});
-		const result = searcher.search(query.parse(location.search).searchReq);
+		const req:any = query.parse(location.search).searchReq
+		const result:any = searcher.search(req);
 		setFindedProducts(result)
 	}
 
@@ -25,14 +31,11 @@ const SearchPage = ({location}) => {
 		.then(products => getFindedProducts(products.data))
 	}, [])
 
-
-	const handlePageChange = (pageIndex) => {
+	const handlePageChange = (pageIndex:number) => {
 		setCurrentPage(pageIndex)
 	}
 
-
-
-	useEffect(() => {console.log(findedProducts)}, [findedProducts])
+	useEffect(() => {}, [findedProducts])
 
 	return (
 		<div className="container">
@@ -41,7 +44,7 @@ const SearchPage = ({location}) => {
 				{findedProducts
 				?(<div className="row w-100 justify-content-around my-3">
 					<Pagination productCount={findedProducts.length} pageSize={pageSize} onPageChange={handlePageChange} currentPage={currentPage}/>
-					{findedProducts.slice((currentPage-1)*pageSize,(currentPage-1)*pageSize+pageSize).map((item) => console.log(item) ||(
+					{paginate(findedProducts, currentPage, pageSize).map((item:any) => (
 						<div className="col col-md-2 my-3" key={item.manufacturerCode}>
 							<div className="card text-center" >
 								<img src={item.img} className="card-img-top" alt="..." />
@@ -53,7 +56,8 @@ const SearchPage = ({location}) => {
 						</div>
 					))}
 					<Pagination productCount={findedProducts.length} pageSize={pageSize} onPageChange={handlePageChange} currentPage={currentPage}/>
-				</div>) : null}
+				</div>)
+				: null}
 			</div>
 		</div>
 	);

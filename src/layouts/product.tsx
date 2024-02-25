@@ -2,17 +2,21 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 
-const ProductPage = ({match, onCartChange}) => {
+interface ProductPageProps {
+	match:any,
+	onCartChange:any
+}
 
-	const [product, setProduct] = useState({})
-	const [selectedImg, setSelectedImg] = useState("")
-	const [selectedSize, setSelectedSize] = useState("")
-	const [noSelectedSize, setNoSelectedSize] = useState(false)
-	const [cart, setCart] = useState()
-	const [inCart, setInCart] = useState()
+const ProductPage = ({match, onCartChange}:ProductPageProps) => {
 
-	const getData = (product) => {
-		console.log(match)
+	const [product, setProduct] = useState<any>({})
+	const [selectedImg, setSelectedImg] = useState<string>("")
+	const [selectedSize, setSelectedSize] = useState<string>("")
+	const [noSelectedSize, setNoSelectedSize] = useState<boolean>(false)
+	const [cart, setCart] = useState<[]>()
+	const [inCart, setInCart] = useState<boolean>()
+
+	const getData = (product:any) => {
 		setProduct(product)
 		setSelectedImg(product.img[0])
 		setCart(JSON.parse(localStorage.cart))
@@ -25,13 +29,13 @@ const ProductPage = ({match, onCartChange}) => {
 		.then(product => getData(product.data))
 	}, [match])
 
-	const handleSelectSize = (size) => {
+	const handleSelectSize = (size:string) => {
 		selectedSize === size ? setSelectedSize("") : setSelectedSize(size)
 		setNoSelectedSize(false)
 	}
 
 	const handleAddToCart = () => {
-		let newCart = cart
+		let newCart:any = cart
 		if (newCart[product.manufacturerCode] === undefined) {
 			if (selectedSize === "") {
 				setNoSelectedSize(true)
@@ -67,7 +71,7 @@ const ProductPage = ({match, onCartChange}) => {
 					<div className="d-flex w-50 flex-row">
 						{product.img.length !== 1 ? (
 						<div className="d-flex flex-column w-25">
-								{product.img.map((item) => (
+								{product.img.map((item:string) => (
 									<div	className="d-flex pt-3"
 												key={"img" + product.img.indexOf(item)}>
 										<img	src={item}
@@ -109,7 +113,7 @@ const ProductPage = ({match, onCartChange}) => {
 								))}
 							</ul>
 						</nav>
-						<button	type="button mt-3"
+						<button	type="button"
 										className="btn btn-primary"
 										onClick={()=>handleAddToCart()}>
 							{	inCart === true
