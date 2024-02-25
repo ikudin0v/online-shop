@@ -16,7 +16,7 @@ let prevCategory:any
 
 const ProductsListPage = ({match}:ProductsListPageProps) => {
 
-	const pageSize = 16
+	const pageSize = 15
 	const [currentPage, setCurrentPage] = useState<number>(1)
 	const [productList, setProductList] = useState<[]>([])
 	const [colors, setColors] = useState<(string|undefined)[]>([])

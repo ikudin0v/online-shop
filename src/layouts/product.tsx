@@ -76,8 +76,8 @@ const ProductPage = ({match, onCartChange}:ProductPageProps) => {
 												key={"img" + product.img.indexOf(item)}>
 										<img	src={item}
 													className={	item === selectedImg
-																			? "rounded d-block border border-3 border-primary"
-																			: "rounded d-block"}
+																			? "rounded d-flex w-100 border border-3 border-primary"
+																			: "rounded d-flex w-100"}
 													alt=""
 													key={"img"+product.img.indexOf(item)}
 													onClick={() => setSelectedImg(item)}/>
@@ -104,7 +104,7 @@ const ProductPage = ({match, onCartChange}:ProductPageProps) => {
 								{Object.keys(product.size).map((item) => (
 								<li	className={product.size[item].availability === "В наличии" ? (selectedSize===item?"page-item active":"page-item"):"page-item disabled"}
 										key={item}>
-									<p	className="page-link cursor-pointer"
+									<p	className="page-link cursor-pointer mb-0"
 											role="button"
 											onClick={() => handleSelectSize(item)}>
 										{item}
