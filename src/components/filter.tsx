@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface FilterProps {
 	filterColors: (string|undefined)[];
 	colors: (string|undefined)[];
@@ -20,7 +18,8 @@ const Filter = ( { filterColors, colors, onColorChange }: FilterProps) => {
 								className={	filterColors.indexOf(color) !== -1 && filterColors.length !== colors.length
 															? "list-group-item list-group-item-action active"
 															:"list-group-item list-group-item-action"}
-								key={color} onClick={()=>onColorChange(color)}>{color}</a>
+								key={color} onClick={()=>onColorChange(color)}>{color}
+						</a>
 					))}
 				</div>
 			</div>

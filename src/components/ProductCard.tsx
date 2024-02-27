@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from "react-router-dom";
 
 interface ProductCardProps {
@@ -20,5 +19,5 @@ const ProductCard = ({product, link}:ProductCardProps) => {
 		</div>
 	);
 }
- 
+
 export default ProductCard;

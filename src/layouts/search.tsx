@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import query from 'query-string';
-import FuzzySearch from 'fuzzy-search'
 import Pagination from '../components/pagination';
-// import _ from 'lodash';
-import axios from 'axios';
 import { paginate } from '../utils/paginate';
+import httpService from '../services/http.service';
+import { searcher } from '../utils/searcher';
 
 interface SearchProps {
 	location:any
@@ -13,29 +12,22 @@ interface SearchProps {
 
 const SearchPage = ({location}:SearchProps) => {
 
+	const PATH = "https://online-store-45134-default-rtdb.firebaseio.com/productsForSearch"
 	const [findedProducts, setFindedProducts] = useState<[]>([])
 	const [currentPage, setCurrentPage] = useState(1)
 	const pageSize:number = 24
 
-	const getFindedProducts = (products:any) => {
-		const searcher = new FuzzySearch(products, ["name"], {
-			caseSensitive: false,
-		});
-		const req:any = query.parse(location.search).searchReq
-		const result:any = searcher.search(req);
-		setFindedProducts(result)
+	async function getData() {
+		const { data } = await httpService.get(PATH)
+		const req = query.parse(location.search).searchReq
+		setFindedProducts(searcher(req, data))
 	}
 
-	useEffect(() => {
-		axios.get("https://online-store-45134-default-rtdb.firebaseio.com/productsForSearch.json")
-		.then(products => getFindedProducts(products.data))
-	}, [])
+	useEffect(() => {getData()}, [location])
 
 	const handlePageChange = (pageIndex:number) => {
 		setCurrentPage(pageIndex)
 	}
-
-	useEffect(() => {}, [findedProducts])
 
 	return (
 		<div className="container">

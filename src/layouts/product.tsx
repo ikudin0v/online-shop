@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import axios from 'axios';
+import httpService from "../services/http.service";
+import { CONFIG } from '../config';
+import localStorageService from "../services/localStorage.service";
 
 interface ProductPageProps {
 	match:any,
@@ -9,6 +11,7 @@ interface ProductPageProps {
 
 const ProductPage = ({match, onCartChange}:ProductPageProps) => {
 
+	const PATH = "catalog/" + match.params.sex + "/" + match.params.subCategory + "/" + match.params.product
 	const [product, setProduct] = useState<any>({})
 	const [selectedImg, setSelectedImg] = useState<string>("")
 	const [selectedSize, setSelectedSize] = useState<string>("")
@@ -16,18 +19,15 @@ const ProductPage = ({match, onCartChange}:ProductPageProps) => {
 	const [cart, setCart] = useState<[]>()
 	const [inCart, setInCart] = useState<boolean>()
 
-	const getData = (product:any) => {
-		setProduct(product)
-		setSelectedImg(product.img[0])
-		setCart(JSON.parse(localStorage.cart))
-		Object.keys(JSON.parse(localStorage.cart)).indexOf(product.manufacturerCode) === -1 ? setInCart(false) : setInCart(true)
+	async function getData() {
+		const { data } = await httpService.get(CONFIG.API_FIREBASE_URL + PATH)
+		setProduct(data)
+		setSelectedImg(data.img[0])
+		setCart(localStorageService.getCart())
+		Object.keys(localStorageService.getCart()).indexOf(data.manufacturerCode) === -1 ? setInCart(false) : setInCart(true)
 	}
 
-
-	useEffect(() => {
-		axios.get("https://online-store-45134-default-rtdb.firebaseio.com/catalog/"+match.params.sex+"/"+match.params.subCategory+"/"+match.params.product+".json")
-		.then(product => getData(product.data))
-	}, [match])
+	useEffect(() => {getData()}, [match])
 
 	const handleSelectSize = (size:string) => {
 		selectedSize === size ? setSelectedSize("") : setSelectedSize(size)
@@ -39,20 +39,20 @@ const ProductPage = ({match, onCartChange}:ProductPageProps) => {
 		if (newCart[product.manufacturerCode] === undefined) {
 			if (selectedSize === "") {
 				setNoSelectedSize(true)
-			 } else {
+			} else {
 				newCart[product.manufacturerCode] = {product:product,
 																						size:selectedSize,
 																						quantity:1}
 				setInCart(true)
 				setNoSelectedSize(false)
-			 }
+			}
 		} else {
 			delete newCart[product.manufacturerCode]
 			setInCart(false)
 			setNoSelectedSize(false)
 		}
-		localStorage.setItem("cart", JSON.stringify(newCart))
-		setCart(JSON.parse(localStorage.cart))
+		localStorageService.setCart(newCart)
+		setCart(newCart)
 		setSelectedSize("")
 		onCartChange()
 	}
@@ -129,5 +129,5 @@ const ProductPage = ({match, onCartChange}:ProductPageProps) => {
 		} </>
 	)
 }
- 
+
 export default ProductPage

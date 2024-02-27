@@ -1,8 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {generateAuthError} from "../utils/generateAuthErrors"
+import localStorageService from '../services/localStorage.service';
+import { CONFIG } from '../config';
+import httpService from '../services/http.service';
 
 const AuthContext = React.createContext()
 
@@ -10,28 +13,16 @@ export const useAuth = () => {
 	return useContext(AuthContext)
 }
 
-const TOKEN_KEY = "jwt_token"
-const REFRESH_KEY = "jwt_refresh_token"
-const EXPIRES_KEY = "jwt_expires"
-const USERID_KEY = "user_local_id"
-
 const AuthProvider = ({ children }) => {
-	const [currentUser, setCurrentUser] = useState({})
-	function setToknes({refreshToken, idToken, localId, expiresIn=3600}) {
-		const expiresDate = new Date().getTime() + expiresIn * 1000
-		localStorage.setItem(USERID_KEY, localId)
-		localStorage.setItem(TOKEN_KEY, idToken)
-		localStorage.setItem(REFRESH_KEY, refreshToken)
-		localStorage.setItem(EXPIRES_KEY, expiresDate)
-	}
 
-	async function signUp( {email, password, name, phone, subscribe} ){
+	const [currentUser, setCurrentUser] = useState({})
+
+	async function signUp( {registrationName, registrationEmail, registrationPhone, registrationPassword, subscribe} ){
 		try {
-		const url = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key="+process.env.REACT_APP_FIREBASE_KEY
-		const { data } = await axios.post(url, {email, password, returnSecureToken:true})
-		setToknes(data)
-		await createUser({id:data.localId, name:name, email:email, phone:phone, subscribe:subscribe, cart:localStorage.cart, orders:[]})
-		setCurrentUser({id:data.localId, name:name, email:email, phone:phone, subscribe:subscribe, cart:localStorage.cart, orders:[]})
+			const url = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key="+process.env.REACT_APP_FIREBASE_KEY
+			const { data } = await axios.post(url, {email:registrationEmail, password:registrationPassword, returnSecureToken:true})
+			createUser({id:data.localId, name:registrationName, email:registrationEmail, phone:registrationPhone, subscribe:subscribe, cart:localStorageService.getCart, orders:[]})
+			setCurrentUser({id:data.localId, name:registrationName, email:registrationEmail, phone:registrationPhone, subscribe:subscribe, cart:localStorageService.getCart, orders:[]})
 		}
 		catch (error) {
 			toast.error(generateAuthError(error.response.data.error.message));
@@ -42,37 +33,30 @@ const AuthProvider = ({ children }) => {
 		try {
 			const url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key="+process.env.REACT_APP_FIREBASE_KEY
 			const { data } = await axios.post(url, {email, password, returnSecureToken:true})
-			setToknes(data)
-			await getUserData(data.localId)
+			localStorageService.setTokens(data)
+			getUserData(data.localId)
 		} catch (error) {
 			toast.error(generateAuthError(error.response.data.error.message));
 		}
 	}
+
 	function logOut() {
 		setCurrentUser({})
-		localStorage.removeItem(USERID_KEY)
-		localStorage.removeItem(TOKEN_KEY)
-		localStorage.removeItem(REFRESH_KEY)
-		localStorage.removeItem(EXPIRES_KEY)
+		localStorageService.clearTokens()
 	}
 
 	async function createUser(userData){
-		await axios.put("https://online-store-45134-default-rtdb.firebaseio.com/users/" + userData.id + ".json", userData)
+		await httpService.put(CONFIG.API_FIREBASE_URL + "users/" + userData.id, userData)
 	}
 
 	async function getUserData(userId) {
-		await axios.get("https://online-store-45134-default-rtdb.firebaseio.com/users/" + userId + ".json")
-		.then(userData => setCurrentUser(userData.data))
+		const { data } = await httpService.get(CONFIG.API_FIREBASE_URL + "user/" + userId + ".json")
+		setCurrentUser(data)
 	}
-	
+
 	if (localStorage.user_local_id !== undefined) {
 		getUserData(localStorage.user_local_id)
 	}
-	// useEffect(() => {
-	// 	if (localStorage[USERID_KEY]) {
-
-	// 	}
-	// })
 
 	return (
 		<AuthContext.Provider value={ {signUp, logIn, logOut, getUserData, currentUser} }>

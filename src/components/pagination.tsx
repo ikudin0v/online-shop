@@ -1,4 +1,3 @@
-import React from 'react';
 import _ from 'lodash';
 
 interface PaginationProps {
@@ -9,7 +8,7 @@ interface PaginationProps {
 }
 
 const Pagination = ({productCount, pageSize, currentPage, onPageChange}: PaginationProps) => {
-	
+
 	const pagesCount: number = Math.ceil(productCount/pageSize)
 	if (pagesCount <= 1){return null}
 	const pagesList: number[] = _.range(1, pagesCount+1)

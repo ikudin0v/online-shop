@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface CartItem {
 	cartItem:number,
 	cart:any,
@@ -37,5 +35,5 @@ const CartItem = ( {cartItem, cart, changeQuantity, deleteFromCart}: CartItem ) 
 		</div>
 	);
 }
- 
+
 export default CartItem;

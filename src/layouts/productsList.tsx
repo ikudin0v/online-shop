@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Pagination from '../components/pagination';
 import Filter from '../components/filter';
 import { Link } from "react-router-dom";
 import _ from 'lodash';
-import axios from 'axios';
 import { paginate } from '../utils/paginate';
 import { filter } from '../utils/filter';
 import ProductCard from '../components/ProductCard';
+import httpService from '../services/http.service';
+import { CONFIG } from '../config';
 
 interface ProductsListPageProps {
 	match:any
@@ -16,12 +17,13 @@ let prevCategory:any
 
 const ProductsListPage = ({match}:ProductsListPageProps) => {
 
+	const PATH = "catalog/" + match.params.page + "/" + match.params.subCategory
 	const pageSize = 15
 	const [currentPage, setCurrentPage] = useState<number>(1)
-	const [productList, setProductList] = useState<[]>([])
+	const [productList, setProductList] = useState<object[]>([])
 	const [colors, setColors] = useState<(string|undefined)[]>([])
 	const [filterColors, setFilterColors] = useState<(string|undefined)[]>([])
-	const [filteredProductList, setFilteredProductList] = useState<[]>([])
+	const [filteredProductList, setFilteredProductList] = useState<object[]>([])
 
 	const getColors = (products:any[]):(string|undefined)[] => {
 		let newColors:(string|undefined)[] = []
@@ -31,24 +33,22 @@ const ProductsListPage = ({match}:ProductsListPageProps) => {
 		return(newColors)
 	}
 
-	const makeProductList = (products:[]) => {
-		let newProductList:[] = []
-		Object.keys(products).map((item:any) => newProductList.push(products[item]))
+	async function getData() {
+		const { data } = await httpService.get(CONFIG.API_FIREBASE_URL + PATH)
+		let newProductList:any[] = []
+		Object.keys(data).map((item:any) => newProductList.push(data[item]))
 		setProductList(newProductList)
 		setColors(getColors(newProductList))
 		setFilteredProductList(newProductList)
 		setFilterColors(getColors(newProductList))
 	}
-	
+
 	if (prevCategory !== match.params.page+match.params.subCategory){
 		setCurrentPage(1)
 		prevCategory=match.params.page+match.params.subCategory
 	}
 	
-	useEffect(() => {
-		axios.get("https://online-store-45134-default-rtdb.firebaseio.com/catalog/"+match.params.page+"/"+match.params.subCategory+".json")
-		.then(products => makeProductList(products.data))
-	}, [prevCategory])
+	useEffect(() => {getData()}, [prevCategory])
 
 	const handlePageChange = (pageIndex:number) => {
 		setCurrentPage(pageIndex)

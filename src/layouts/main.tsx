@@ -1,23 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { CONFIG } from '../config';
+import httpService from '../services/http.service';
 
 interface MainProps {
 	sex:any
 }
 
 const MainPage = ({sex}:MainProps) => {
-	
+
+	const PATH = "categories/" + sex + ".json"
+	const [categories, setCategories] = useState({})
 	const sexToRus = {male:"Мужчинам",
 										female:"Женщинам",
 										kids:"Детям",}
 
-	const [categories, setCategories] = useState({})
+	async function getCategories() {
+		const { data } = await httpService.get(CONFIG.API_FIREBASE_URL + PATH)
+		setCategories(data)
+	}
 
-	useEffect(() => {
-		axios.get("https://online-store-45134-default-rtdb.firebaseio.com/categories/"+sex+".json")
-		.then(categories => setCategories(categories.data))
-	}, [])
+	useEffect(() => {getCategories()}, [sex])
 
 	return (
 		<div className='container d-flex flex-row'>
@@ -42,5 +45,5 @@ const MainPage = ({sex}:MainProps) => {
 		</div>
 	);
 }
- 
+
 export default MainPage;

@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import _ from 'lodash';
 import { useAuth } from '../hooks/useAuth';
 import { validate } from '../utils/validator';
 
@@ -9,6 +8,7 @@ interface ModalProps {
 }
 
 const LoginModal = ({sex}:ModalProps) => {
+
 	const [loginData, setLoginData] = useState({email:"", password:""})
 	const [registrationData, setRegistrationData] = useState({registrationName:"", registrationEmail:"", registrationPhone:"", registrationPassword:"", subscribe:false})
 	const [errors, setErrors] = useState({registrationName:false, registrationEmail:false, registrationPhone:false, registrationPassword:false, registrationConfirmPassword:false})
@@ -16,8 +16,8 @@ const LoginModal = ({sex}:ModalProps) => {
 	const history = useHistory()
 
 	const handleRegistration = () => {
-			signUp(registrationData)
-			history.push("/")
+		signUp(registrationData)
+		history.push("/")
 	}
 
 	const handleLogIn = () => {
@@ -139,5 +139,5 @@ const LoginModal = ({sex}:ModalProps) => {
 		</div>
 	)
 }
- 
+
 export default LoginModal;

@@ -1,8 +1,6 @@
-import React from 'react';
-
 const PolicyPage = () => {
 	return (
-		<div className="container">
+		<div className="container p-3">
 			<h1>Пользовательское соглашение об использовании Интернет-сайта</h1>
 			<h2>1. Общие положения</h2>
 			<p>1.1 Правообладатель – Общество с ограниченной ответственностью «Online Store» (ОГРН: 123456789101, ИНН: 1234567890),

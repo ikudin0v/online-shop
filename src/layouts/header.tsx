@@ -1,16 +1,21 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import NavbarCategory from "../components/navbarCategory"
 import { Link, useHistory } from "react-router-dom";
 import LoginModal from "./loginModal";
-import FuzzySearch from 'fuzzy-search';
-import axios from 'axios';
 import { useAuth } from '../hooks/useAuth';
+import httpService from "../services/http.service";
+import { CONFIG } from '../config';
+import localStorageService from "../services/localStorage.service";
+import { searcher } from "../utils/searcher";
 
 interface HeaderProps {
 	match:any
 }
 
 const Header = ({match}:HeaderProps) => {
+
+	const CATEGORIES_PATH = "categories"
+	const SEARCH_PATH = "productsForSearch"
 	const [categories, setCategories] = useState()
 	const [cart, setCart] = useState(JSON.parse(localStorage.cart))
 	const [productsForSearch, setProductsForSearch] = useState([])
@@ -19,30 +24,30 @@ const Header = ({match}:HeaderProps) => {
 	const {currentUser, logOut} = useAuth()
 	const searchInput = (document.getElementById("searchInput") as HTMLInputElement)
 
+	async function getCategories() {
+		const { data } = await httpService.get(CONFIG.API_FIREBASE_URL + CATEGORIES_PATH)
+		setCategories(data)
+	}
+	async function getSearchData() {
+		const { data } = await httpService.get(CONFIG.API_FIREBASE_URL + SEARCH_PATH)
+		setProductsForSearch(data)
+	}
+
 	useEffect(() => {
-		axios.get("https://online-store-45134-default-rtdb.firebaseio.com/categories.json")
-		.then(categories => setCategories(categories.data))
+		getCategories()
+		getSearchData()
 	}, [])
 
 	useEffect(() => {
-	axios.get("https://online-store-45134-default-rtdb.firebaseio.com/productsForSearch.json")
-	.then(products => setProductsForSearch(products.data))
-}, [])
-
-	useEffect(() => {
-		setCart(JSON.parse(localStorage.cart))
+		setCart(localStorageService.getCart)
 	}, [localStorage.cart])
 
 	useEffect(() => {}, [currentUser])
 
 	const liveSearch = () => {
-		if (searchInput?.value.length >= 3) {
-			const searcher = new FuzzySearch(productsForSearch, ['name'], {
-				caseSensitive: false,
-			});
-			const result = searcher.search(searchInput?.value);
-			setFindedProducts(result)
-		} else {setFindedProducts([])}
+		searchInput?.value.length >= 3
+		? setFindedProducts(searcher(searchInput?.value, productsForSearch))
+		: setFindedProducts([])
 	}
 
 	const handleSearch = () => {
@@ -78,7 +83,6 @@ const Header = ({match}:HeaderProps) => {
 										<i className="bi bi-person-circle " style={{color: "gray", fontSize: 1.5+"rem"}}></i>
 										{" "+currentUser.name}
 									</a>
-										
 									<ul className="dropdown-menu">
 										<li><a className="dropdown-item" href="#">Мои заказы</a></li>
 										<li><a className="dropdown-item" href="#" onClick={logOut}>Выйти</a></li>
