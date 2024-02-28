@@ -61,10 +61,10 @@ const LoginModal = ({sex}:ModalProps) => {
 													className="form-control"
 													id="loginPassword"
 													placeholder="**********"
-													onBlur={(e) => setLoginData({...loginData, password:e.target.value})}/>
+													onChange={(e) => setLoginData({...loginData, password:e.target.value})}/>
 								</div>
 								<div className="m-1">
-									<button type="button" className="btn btn-primary w-100" data-bs-dismiss="modal" disabled={loginData.email === "" || loginData.password === "" ? true : false} onClick={handleLogIn}>Войти</button>
+									<button type="button" className="btn btn-primary w-100" data-bs-dismiss="modal" disabled={loginData.email === "" || loginData.password.length < 6 ? true : false} onClick={handleLogIn}>Войти</button>
 								</div>
 							</div>
 

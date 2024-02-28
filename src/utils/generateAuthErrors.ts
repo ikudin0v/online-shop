@@ -10,6 +10,8 @@ export function generateAuthError(code: string) {
       return 'Ошибка в данных формы';
 		case 'INVALID_EMAIL':
 			return 'Ошибка при вводе email';
+		case 'INVALID_LOGIN_CREDENTIALS':
+			return 'Неверный логин/пароль';
 
     default:
       return code;
