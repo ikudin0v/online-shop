@@ -3,28 +3,38 @@ import { Link } from "react-router-dom";
 import httpService from "../services/http.service";
 import { CONFIG } from '../config';
 import localStorageService from "../services/localStorage.service";
+import { useAuth } from '../hooks/useAuth';
+import _ from "lodash";
 
 interface ProductPageProps {
 	match:any,
-	onCartChange:any
 }
 
-const ProductPage = ({match, onCartChange}:ProductPageProps) => {
+const ProductPage = ({match}:ProductPageProps) => {
 
-	const PATH = "catalog/" + match.params.sex + "/" + match.params.subCategory + "/" + match.params.product
 	const [product, setProduct] = useState<any>({})
 	const [selectedImg, setSelectedImg] = useState<string>("")
 	const [selectedSize, setSelectedSize] = useState<string>("")
 	const [noSelectedSize, setNoSelectedSize] = useState<boolean>(false)
 	const [cart, setCart] = useState<[]>()
 	const [inCart, setInCart] = useState<boolean>()
+	const {currentUser, setCurrentUser} = useAuth()
+	const CATALOG_PATH = "catalog/" + match.params.sex + "/" + match.params.subCategory + "/" + match.params.product
+
 
 	async function getData() {
-		const { data } = await httpService.get(CONFIG.API_FIREBASE_URL + PATH)
+		const { data } = await httpService.get(CONFIG.API_FIREBASE_URL + CATALOG_PATH)
 		setProduct(data)
 		setSelectedImg(data.img[0])
 		setCart(localStorageService.getCart())
 		Object.keys(localStorageService.getCart()).indexOf(data.manufacturerCode) === -1 ? setInCart(false) : setInCart(true)
+	}
+
+	async function onCartChange(newCart:any) {
+		setCurrentUser({...currentUser, cart:newCart})
+		if (currentUser.id) {
+		httpService.put(CONFIG.API_FIREBASE_URL + "users/" + currentUser.id + "/cart", newCart)
+		}
 	}
 
 	useEffect(() => {getData()}, [match])
@@ -35,7 +45,7 @@ const ProductPage = ({match, onCartChange}:ProductPageProps) => {
 	}
 
 	const handleAddToCart = () => {
-		let newCart:any = cart
+		let newCart:any = _.cloneDeep(cart)
 		if (newCart[product.manufacturerCode] === undefined) {
 			if (selectedSize === "") {
 				setNoSelectedSize(true)
@@ -48,13 +58,14 @@ const ProductPage = ({match, onCartChange}:ProductPageProps) => {
 			}
 		} else {
 			delete newCart[product.manufacturerCode]
+			httpService.delete(CONFIG.API_FIREBASE_URL + "users/" + currentUser.id + "/cart/" + product.manufacturerCode)
 			setInCart(false)
 			setNoSelectedSize(false)
 		}
 		localStorageService.setCart(newCart)
 		setCart(newCart)
 		setSelectedSize("")
-		onCartChange()
+		onCartChange(newCart)
 	}
 
 

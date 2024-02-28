@@ -16,8 +16,6 @@ function App() {
 		localStorage.setItem("cart", "{}")
 	}
 
-	const [, setCart] = useState(JSON.parse(localStorage.cart))
-
 	return (
 		<div className="App">
 			<AuthProvider>
@@ -25,8 +23,8 @@ function App() {
 				<Switch>
 					<Route path="/:sex/search" render={(props) => <SearchPage {...props} />} />
 					<Route path="/:sex/policy" render={(props) => <PolicyPage />} />
-					<Route path="/:sex/cart" render={() => <CartPage onCartChange={() => setCart(JSON.parse(localStorage.cart))} />} />
-					<Route path="/:sex/:subCategory/:product" render={(props) => <ProductPage onCartChange={() => setCart(JSON.parse(localStorage.cart))} {...props} />} />
+					<Route path="/:sex/cart" render={() => <CartPage />} />
+					<Route path="/:sex/:subCategory/:product" render={(props) => <ProductPage {...props} />} />
 					<Route path="/:page/:subCategory" render={(props) => <ProductsListPage {...props} />} />
 					<Route path="/:page" render={(props) => <MainPage sex={props.match.params.page}/>} />
 

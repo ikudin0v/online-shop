@@ -17,7 +17,7 @@ const Header = ({match}:HeaderProps) => {
 	const CATEGORIES_PATH = "categories"
 	const SEARCH_PATH = "productsForSearch"
 	const [categories, setCategories] = useState()
-	const [cart, setCart] = useState(JSON.parse(localStorage.cart))
+	// const [cart, setCart] = useState(JSON.parse(localStorage.cart))
 	const [productsForSearch, setProductsForSearch] = useState([])
 	const [findedProducts, setFindedProducts] = useState([])
 	const history = useHistory()
@@ -38,10 +38,6 @@ const Header = ({match}:HeaderProps) => {
 		getSearchData()
 	}, [])
 
-	useEffect(() => {
-		setCart(localStorageService.getCart)
-	}, [localStorage.cart])
-
 	useEffect(() => {}, [currentUser])
 
 	const liveSearch = () => {
@@ -54,7 +50,7 @@ const Header = ({match}:HeaderProps) => {
 		if (searchInput?.value.length >= 3)
 		{history.push("/" + match.params.sex + "/search?searchReq=" + searchInput.value)}
 	}
-
+console.log(currentUser)
 	return (
 		<div className='container mt-3'>
 			<LoginModal sex={match.params.sex}/>
@@ -76,7 +72,7 @@ const Header = ({match}:HeaderProps) => {
 				<div>
 					<ul className="nav mx-3">
 						<li className="nav-item mx-3">
-							{currentUser === undefined || Object.keys(currentUser).length === 0
+							{!currentUser.id
 							? <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Вход / Регистрация</button>
 							: <div className="dropdown">
 									<a className="nav-link dropdown-toggle fs-5" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -85,13 +81,13 @@ const Header = ({match}:HeaderProps) => {
 									</a>
 									<ul className="dropdown-menu">
 										<li><a className="dropdown-item" href="#">Мои заказы</a></li>
-										<li><a className="dropdown-item" href="#" onClick={logOut}>Выйти</a></li>
+										<li><Link className="dropdown-item" to="/" onClick={logOut}>Выйти</Link></li>
 									</ul>
 								</div>
 							}
 						</li>
 						<li className="nav-item">
-							<div className="btn btn-primary"><Link to={"/"+match.params.sex+"/cart"} className={"text-decoration-none text-reset"}>{Object.keys(cart).length === 0 ? "Корзина (пусто)" : "Корзина (" + Object.keys(cart).length + ")"}</Link></div>
+							<div className="btn btn-primary"><Link to={"/"+match.params.sex+"/cart"} className={"text-decoration-none text-reset"}>{!currentUser.cart||Object.keys(currentUser.cart).length === 0 ? "Корзина (пусто)" : "Корзина (" + Object.keys(currentUser.cart).length + ")"}</Link></div>
 						</li>
 					</ul>
 				</div>

@@ -4,23 +4,32 @@ import CartItem from '../components/cartItem';
 import CartSummary from '../components/cartSummary';
 import { getNameByQuantity } from "../utils/getNameByQuantity"
 import localStorageService from "../services/localStorage.service";
+import { useAuth } from '../hooks/useAuth';
+import httpService from '../services/http.service';
+import { CONFIG } from '../config'
 
-interface CartProps {
-	onCartChange:any
-}
+const CartPage = () => {
 
-const CartPage = ({onCartChange}:CartProps) => {
-
+	const {currentUser, setCurrentUser} = useAuth()
 	const [cart, setCart] = useState(localStorageService.getCart)
 	const totalCost:number = Object.keys(cart).reduce((partialSum, item) => partialSum + cart[item].product.price * cart[item].quantity, 0)
 	const totalItems:number = Object.keys(cart).reduce((partialSum, item) => partialSum + cart[item].quantity, 0)
+
+	async function onCartChange(newCart:any) {
+		setCurrentUser({...currentUser, cart:newCart})
+		if (currentUser.id) {
+			console.log(cart)
+		httpService.put(CONFIG.API_FIREBASE_URL + "users/" + currentUser.id + "/cart", newCart)
+		}
+	}
 
 	const deleteFromCart = (product:number) => {
 		let newCart = _.cloneDeep(cart)
 		delete newCart[product]
 		setCart(newCart)
 		localStorageService.setCart(newCart)
-		onCartChange()
+		httpService.delete(CONFIG.API_FIREBASE_URL + "users/" + currentUser.id + "/cart/" + product)
+		onCartChange(newCart)
 	}
 
 	const changeQuantity = (product:number, order:string) => {
@@ -29,11 +38,16 @@ const CartPage = ({onCartChange}:CartProps) => {
 			newCart[product].quantity++
 		}
 		if (order === "desc") {
-			cart[product].quantity === 1 ? delete newCart[product] : newCart[product].quantity--
+			if (cart[product].quantity === 1) {
+				delete newCart[product]
+				httpService.delete(CONFIG.API_FIREBASE_URL + "users/" + currentUser.id + "/cart/" + product)
+			} else {
+				newCart[product].quantity--
+			}
 		}
 		setCart(newCart)
 		localStorageService.setCart(newCart)
-		onCartChange()
+		onCartChange(newCart)
 	}
 
 
