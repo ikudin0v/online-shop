@@ -18,6 +18,7 @@ const AuthProvider = ({ children }) => {
 
 	async function signUp( {registrationName, registrationEmail, registrationPhone, registrationPassword, subscribe} ){
 		const data = await authService.signUp({email:registrationEmail, password:registrationPassword})
+		localStorageService.setTokens(data)
 		createUser({id:data.localId, name:registrationName, email:registrationEmail, phone:registrationPhone, subscribe:subscribe, cart:localStorageService.getCart, orders:[]})
 		setCurrentUser({id:data.localId, name:registrationName, email:registrationEmail, phone:registrationPhone, subscribe:subscribe, cart:localStorageService.getCart, orders:[]})
 	}
