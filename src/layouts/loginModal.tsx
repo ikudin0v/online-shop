@@ -12,6 +12,7 @@ const LoginModal = ({sex}:ModalProps) => {
 	const [loginData, setLoginData] = useState({email:"", password:""})
 	const [registrationData, setRegistrationData] = useState({registrationName:"", registrationEmail:"", registrationPhone:"", registrationPassword:"", subscribe:false})
 	const [errors, setErrors] = useState({registrationName:false, registrationEmail:false, registrationPhone:false, registrationPassword:false, registrationConfirmPassword:false})
+	const [passwordVisible, setPasswordVisible] = useState({log:false, reg:false, regConfirm:false})
 	const {signUp, logIn}:any = useAuth()
 	const history = useHistory()
 
@@ -57,11 +58,16 @@ const LoginModal = ({sex}:ModalProps) => {
 								</div>
 								<div className="m-1">
 									<label htmlFor="exampleFormControlInput1" className="form-label">Введите пароль</label>
-									<input	type="password"
-													className="form-control"
-													id="loginPassword"
-													placeholder="**********"
-													onChange={(e) => setLoginData({...loginData, password:e.target.value})}/>
+									<div className="input-group mb-3">
+										<input	type={passwordVisible.log?"text":"password"}
+														className="form-control"
+														id="loginPassword"
+														placeholder="**********"
+														onChange={(e) => setLoginData({...loginData, password:e.target.value})}/>
+										<button className="btn btn-outline-primary" onClick={() => setPasswordVisible({...passwordVisible, log:!passwordVisible.log})}>
+											{passwordVisible.log?<i className="bi bi-eye-slash"></i>:<i className="bi bi-eye"></i>}
+										</button>
+									</div>
 								</div>
 								<div className="m-1">
 									<button type="button" className="btn btn-primary w-100" data-bs-dismiss="modal" disabled={loginData.email === "" || loginData.password.length < 6 ? true : false} onClick={handleLogIn}>Войти</button>
@@ -98,20 +104,30 @@ const LoginModal = ({sex}:ModalProps) => {
 								</div>
 								<div className="m-1">
 									<label htmlFor="exampleFormControlInput1" className="form-label">Придумайте пароль (минимум 8 символов)</label>
-									<input	type="password"
-													className={!errors.registrationPassword?"form-control":"form-control border border-danger" }
-													id="registrationPassword"
-													placeholder="**********"
-													onBlur={(e) => {setErrors({...errors, [e.target.id]:validate(e.target.id, e.target.value)})
-																					setRegistrationData({...registrationData, [e.target.id]:e.target.value})}}/>
+									<div className="input-group mb-3">
+										<input	type={passwordVisible.reg?"text":"password"}
+														className={!errors.registrationPassword?"form-control":"form-control border border-danger" }
+														id="registrationPassword"
+														placeholder="**********"
+														onBlur={(e) => {setErrors({...errors, [e.target.id]:validate(e.target.id, e.target.value)})
+																						setRegistrationData({...registrationData, [e.target.id]:e.target.value})}}/>
+										<button className="btn btn-outline-primary" onClick={() => setPasswordVisible({...passwordVisible, reg:!passwordVisible.reg})}>
+											{passwordVisible.reg?<i className="bi bi-eye-slash"></i>:<i className="bi bi-eye"></i>}
+										</button>
+									</div>
 								</div>
 								<div className="m-1">
 									<label htmlFor="exampleFormControlInput1" className="form-label">Подтвердите пароль</label>
-									<input	type="password"
-													className={!errors.registrationConfirmPassword ? "form-control" : "form-control border border-danger" }
-													id="registrationConfirmPassword"
-													placeholder="**********"
-													onBlur={(e) => {setErrors({...errors, [e.target.id]:validate(e.target.id, e.target.value, registrationData.registrationPassword)})}}/>
+									<div className="input-group mb-3">
+										<input	type={passwordVisible.regConfirm?"text":"password"}
+														className={!errors.registrationConfirmPassword ? "form-control" : "form-control border border-danger" }
+														id="registrationConfirmPassword"
+														placeholder="**********"
+														onBlur={(e) => {setErrors({...errors, [e.target.id]:validate(e.target.id, e.target.value, registrationData.registrationPassword)})}}/>
+										<button className="btn btn-outline-primary" onClick={() => setPasswordVisible({...passwordVisible, regConfirm:!passwordVisible.regConfirm})}>
+											{passwordVisible.regConfirm?<i className="bi bi-eye-slash"></i>:<i className="bi bi-eye"></i>}
+										</button>
+									</div>
 								</div>
 								<div className="form-check m-2">
 									<input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" onChange={() => {setRegistrationData({...registrationData, subscribe:!registrationData.subscribe})}}/>
