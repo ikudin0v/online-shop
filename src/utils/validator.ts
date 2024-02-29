@@ -30,10 +30,10 @@ export function validate(field:string, data:string, registrationPassword?:string
 		}
 
 		case "registrationPassword": {
-			if (String(data).match(/^[a-zA-Z0-9]{3,}/)) {
+			if (String(data).match(/^[a-zA-Z0-9]{6,}/)) {
 				return false
 			} else {
-				toast.error("Пароль должен состоять из строчных, заглавных латинских символов и цифр")
+				toast.error("Пароль должен содержать от 6 латинских символов или цифр")
 				return true
 			}
 		}

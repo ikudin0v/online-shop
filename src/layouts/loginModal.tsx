@@ -103,7 +103,7 @@ const LoginModal = ({sex}:ModalProps) => {
 																					setRegistrationData({...registrationData, [e.target.id]:e.target.value})}}/>
 								</div>
 								<div className="m-1">
-									<label htmlFor="exampleFormControlInput1" className="form-label">Придумайте пароль (минимум 8 символов)</label>
+									<label htmlFor="exampleFormControlInput1" className="form-label">Придумайте пароль (минимум 6 символов)</label>
 									<div className="input-group mb-3">
 										<input	type={passwordVisible.reg?"text":"password"}
 														className={!errors.registrationPassword?"form-control":"form-control border border-danger" }
