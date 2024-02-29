@@ -1,4 +1,3 @@
-import React, {useState} from 'react';
 import Header from './layouts/header';
 import ProductsListPage from './layouts/productsList';
 import ProductPage from "./layouts/product";

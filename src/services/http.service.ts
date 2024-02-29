@@ -70,5 +70,5 @@ myAxios.interceptors.response.use(
 	}
 );
 
-const httpService = { get: myAxios.get, post: myAxios.post, put: myAxios.patch, delete: myAxios.delete };
+const httpService = { get: myAxios.get, post: myAxios.post, put: myAxios.put, patch:myAxios.patch, delete: myAxios.delete };
 export default httpService;

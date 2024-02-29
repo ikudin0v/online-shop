@@ -6,7 +6,7 @@ import { CONFIG } from '../config';
 import httpService from '../services/http.service';
 import authService from '../services/auth.service';
 
-const AuthContext = React.createContext()
+const AuthContext = React.createContext(null)
 
 export const useAuth = () => {
 	return useContext(AuthContext)
@@ -16,14 +16,14 @@ const AuthProvider = ({ children }) => {
 
 	const [currentUser, setCurrentUser] = useState({})
 
-	async function signUp( {registrationName, registrationEmail, registrationPhone, registrationPassword, subscribe} ){
+	async function signUp( { registrationName, registrationEmail, registrationPhone, registrationPassword, subscribe } ) {
 		const data = await authService.signUp({email:registrationEmail, password:registrationPassword})
 		localStorageService.setTokens(data)
 		createUser({id:data.localId, name:registrationName, email:registrationEmail, phone:registrationPhone, subscribe:subscribe, cart:localStorageService.getCart(), orders:[]})
 		setCurrentUser({id:data.localId, name:registrationName, email:registrationEmail, phone:registrationPhone, subscribe:subscribe, cart:localStorageService.getCart(), orders:[]})
 	}
 
-	async function logIn( {email, password} ) {
+	async function logIn( { email, password } ) {
 		const data = await authService.logIn({email, password})
 		localStorageService.setTokens(data)
 		getUserData(data.localId)
@@ -43,7 +43,7 @@ const AuthProvider = ({ children }) => {
 		const { data } = await httpService.get(CONFIG.API_FIREBASE_URL + "users/" + userId)
 		setCurrentUser(data)
 		if (!data.cart) {
-			setCurrentUser({...currentUser, cart:localStorageService.getCart()})
+			setCurrentUser( {...currentUser, cart:localStorageService.getCart()} )
 			httpService.put(CONFIG.API_FIREBASE_URL + "users/" + data.localId, data)
 		} else {
 			localStorageService.setCart(data.cart)
@@ -55,7 +55,7 @@ const AuthProvider = ({ children }) => {
 	}
 
 	return (
-		<AuthContext.Provider value={ {signUp, logIn, logOut, getUserData, currentUser, setCurrentUser} }>
+		<AuthContext.Provider value={{ signUp, logIn, logOut, getUserData, currentUser, setCurrentUser }}>
 			{children}
 			<ToastContainer />
 		</AuthContext.Provider>

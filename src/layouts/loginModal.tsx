@@ -12,7 +12,7 @@ const LoginModal = ({sex}:ModalProps) => {
 	const [loginData, setLoginData] = useState({email:"", password:""})
 	const [registrationData, setRegistrationData] = useState({registrationName:"", registrationEmail:"", registrationPhone:"", registrationPassword:"", subscribe:false})
 	const [errors, setErrors] = useState({registrationName:false, registrationEmail:false, registrationPhone:false, registrationPassword:false, registrationConfirmPassword:false})
-	const {signUp, logIn} = useAuth()
+	const {signUp, logIn}:any = useAuth()
 	const history = useHistory()
 
 	const handleRegistration = () => {

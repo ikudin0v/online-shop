@@ -18,7 +18,7 @@ const ProductPage = ({match}:ProductPageProps) => {
 	const [noSelectedSize, setNoSelectedSize] = useState<boolean>(false)
 	const [cart, setCart] = useState<[]>()
 	const [inCart, setInCart] = useState<boolean>()
-	const {currentUser, setCurrentUser} = useAuth()
+	const {currentUser, setCurrentUser}:any = useAuth()
 	const CATALOG_PATH = "catalog/" + match.params.sex + "/" + match.params.subCategory + "/" + match.params.product
 
 
@@ -58,7 +58,6 @@ const ProductPage = ({match}:ProductPageProps) => {
 			}
 		} else {
 			delete newCart[product.manufacturerCode]
-			httpService.delete(CONFIG.API_FIREBASE_URL + "users/" + currentUser.id + "/cart/" + product.manufacturerCode)
 			setInCart(false)
 			setNoSelectedSize(false)
 		}
@@ -80,8 +79,8 @@ const ProductPage = ({match}:ProductPageProps) => {
 		{	Object.keys(product).length !== 0
 			? (<div className="container d-flex flex-row">
 					<div className="d-flex w-50 flex-row">
-						{product.img.length !== 1 ? (
-						<div className="d-flex flex-column w-25">
+						{product.img.length !== 1 
+						? (<div className="d-flex flex-column w-25">
 								{product.img.map((item:string) => (
 									<div	className="d-flex pt-3"
 												key={"img" + product.img.indexOf(item)}>
@@ -94,8 +93,8 @@ const ProductPage = ({match}:ProductPageProps) => {
 													onClick={() => setSelectedImg(item)}/>
 									</div>
 								))}
-					</div>)
-			: null
+							</div>)
+						: null
 						}
 						<div className="w-75 p-3">
 							<img	src={selectedImg}
@@ -125,11 +124,11 @@ const ProductPage = ({match}:ProductPageProps) => {
 							</ul>
 						</nav>
 						<button	type="button"
-										className="btn btn-primary"
+										className={inCart?"btn btn-outline-primary":"btn btn-primary"}
 										onClick={()=>handleAddToCart()}>
-							{	inCart === true
-								? "Товар уже в корзине. Удалить из корзины?"
-								: "В корзину"}
+							{inCart
+							? "Товар уже в корзине. Удалить из корзины?"
+							: "В корзину"}
 						</button>
 						<div className="fw-bold mt-3">Описание:</div>
 						<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>

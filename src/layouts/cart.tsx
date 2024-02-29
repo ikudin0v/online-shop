@@ -10,7 +10,7 @@ import { CONFIG } from '../config'
 
 const CartPage = () => {
 
-	const {currentUser, setCurrentUser} = useAuth()
+	const {currentUser, setCurrentUser}:any = useAuth()
 	const [cart, setCart] = useState(localStorageService.getCart)
 	const totalCost:number = Object.keys(cart).reduce((partialSum, item) => partialSum + cart[item].product.price * cart[item].quantity, 0)
 	const totalItems:number = Object.keys(cart).reduce((partialSum, item) => partialSum + cart[item].quantity, 0)
@@ -28,7 +28,6 @@ const CartPage = () => {
 		delete newCart[product]
 		setCart(newCart)
 		localStorageService.setCart(newCart)
-		httpService.delete(CONFIG.API_FIREBASE_URL + "users/" + currentUser.id + "/cart/" + product)
 		onCartChange(newCart)
 	}
 
@@ -40,7 +39,6 @@ const CartPage = () => {
 		if (order === "desc") {
 			if (cart[product].quantity === 1) {
 				delete newCart[product]
-				httpService.delete(CONFIG.API_FIREBASE_URL + "users/" + currentUser.id + "/cart/" + product)
 			} else {
 				newCart[product].quantity--
 			}

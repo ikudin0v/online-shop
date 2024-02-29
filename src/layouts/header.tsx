@@ -5,7 +5,6 @@ import LoginModal from "./loginModal";
 import { useAuth } from '../hooks/useAuth';
 import httpService from "../services/http.service";
 import { CONFIG } from '../config';
-import localStorageService from "../services/localStorage.service";
 import { searcher } from "../utils/searcher";
 
 interface HeaderProps {
@@ -17,11 +16,10 @@ const Header = ({match}:HeaderProps) => {
 	const CATEGORIES_PATH = "categories"
 	const SEARCH_PATH = "productsForSearch"
 	const [categories, setCategories] = useState()
-	// const [cart, setCart] = useState(JSON.parse(localStorage.cart))
 	const [productsForSearch, setProductsForSearch] = useState([])
 	const [findedProducts, setFindedProducts] = useState([])
 	const history = useHistory()
-	const {currentUser, logOut} = useAuth()
+	const {currentUser, logOut}:any = useAuth()
 	const searchInput = (document.getElementById("searchInput") as HTMLInputElement)
 
 	async function getCategories() {
