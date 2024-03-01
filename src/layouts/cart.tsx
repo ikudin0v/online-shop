@@ -48,6 +48,9 @@ const CartPage = () => {
 		onCartChange(newCart)
 	}
 
+	const makeOrder = () => {
+		console.log("order")
+	}
 
 	return (
 		<div className='container'>
@@ -64,7 +67,7 @@ const CartPage = () => {
 						<CartItem cartItem={cartItem} cart={cart} changeQuantity={changeQuantity} key={cartItem} deleteFromCart={deleteFromCart} />
 					))}
 				</div>
-				<CartSummary totalItems={totalItems} totalCost={totalCost}/>
+				<CartSummary totalItems={totalItems} totalCost={totalCost} onMakeOrder={()=>makeOrder()}/>
 			</div>
 		</div>
 	);

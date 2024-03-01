@@ -1,11 +1,16 @@
 import { getNameByQuantity } from "../utils/getNameByQuantity"
+import { useAuth } from '../hooks/useAuth';
 
 interface CartSummary {
 	totalItems: number,
 	totalCost: number
+	onMakeOrder:any
 }
 
-const CartSummary = ( { totalItems, totalCost }:CartSummary ) => {
+const CartSummary = ( { totalItems, totalCost, onMakeOrder }:CartSummary ) => {
+
+	const {currentUser}:any = useAuth()
+
 	return (
 		<div className='col-md-3 shadow p-3 mb-5 bg-body-tertiary rounded h-50'>
 			<h2>Сумма заказа</h2>
@@ -23,7 +28,10 @@ const CartSummary = ( { totalItems, totalCost }:CartSummary ) => {
 				<h2>{totalCost + 249}</h2>
 			</div>
 			<br />
-			<button className="btn btn-primary w-100">
+			{!currentUser.id?<p className="text-center text-danger" color="red">Для оформления заказа войдите или зарегистрируйтесь</p>:null}
+			<button	className="btn btn-primary w-100"
+							disabled={!currentUser.id && totalItems!==0?true:false}
+							onClick={() => onMakeOrder()}>
 				<h3>Перейти к оформлению</h3>
 				<p>{totalItems + " " + getNameByQuantity(totalItems)}</p>
 			</button>

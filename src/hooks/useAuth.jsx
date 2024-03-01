@@ -42,16 +42,16 @@ const AuthProvider = ({ children }) => {
 	async function getUserData(userId) {
 		const { data } = await httpService.get(CONFIG.API_FIREBASE_URL + "users/" + userId)
 		setCurrentUser(data)
-		if (!data.cart) {
-			setCurrentUser( {...currentUser, cart:localStorageService.getCart()} )
-			httpService.put(CONFIG.API_FIREBASE_URL + "users/" + data.localId, data)
-		} else {
-			localStorageService.setCart(data.cart)
-		}
+		// if (!data.cart) {
+		// 	setCurrentUser( {...currentUser, cart:localStorageService.getCart()} )
+		// 	httpService.put(CONFIG.API_FIREBASE_URL + "users/" + data.localId, data)
+		// } else {
+		// 	localStorageService.setCart(data.cart)
+		// }
 	}
 
-	if (localStorage.user_local_id !== undefined) {
-		getUserData(localStorage.user_local_id)
+	if (localStorage["user-local-id"]) {
+		getUserData(localStorageService.getUserId())
 	}
 
 	return (
