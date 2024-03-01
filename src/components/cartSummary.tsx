@@ -32,7 +32,7 @@ const CartSummary = ( { totalItems, totalCost, onMakeOrder }:CartSummary ) => {
 			<button	className="btn btn-primary w-100"
 							disabled={!currentUser.id && totalItems!==0?true:false}
 							onClick={() => onMakeOrder()}>
-				<h3>Перейти к оформлению</h3>
+				<h3>Оформить заказ</h3>
 				<p>{totalItems + " " + getNameByQuantity(totalItems)}</p>
 			</button>
 		</div>

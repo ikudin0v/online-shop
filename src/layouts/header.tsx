@@ -48,7 +48,7 @@ const Header = ({match}:HeaderProps) => {
 		if (searchInput?.value.length >= 3)
 		{history.push("/" + match.params.sex + "/search?searchReq=" + searchInput.value)}
 	}
-console.log(currentUser)
+
 	return (
 		<div className='container mt-3'>
 			<LoginModal sex={match.params.sex}/>
@@ -78,7 +78,7 @@ console.log(currentUser)
 										{" "+currentUser.name}
 									</a>
 									<ul className="dropdown-menu">
-										<li><a className="dropdown-item" href="#">Мои заказы</a></li>
+										<li><Link className="dropdown-item" to={"/"+match.params.sex+"/orders"}>Мои заказы</Link></li>
 										<li><Link className="dropdown-item" to="/" onClick={logOut}>Выйти</Link></li>
 									</ul>
 								</div>

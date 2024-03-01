@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import localStorageService from '../services/localStorage.service';
@@ -30,7 +30,7 @@ const AuthProvider = ({ children }) => {
 	}
 
 	function logOut() {
-		setCurrentUser({})
+		setCurrentUser({cart:{}})
 		localStorageService.setCart({})
 		localStorageService.clearTokens()
 	}
@@ -42,17 +42,22 @@ const AuthProvider = ({ children }) => {
 	async function getUserData(userId) {
 		const { data } = await httpService.get(CONFIG.API_FIREBASE_URL + "users/" + userId)
 		setCurrentUser(data)
-		// if (!data.cart) {
-		// 	setCurrentUser( {...currentUser, cart:localStorageService.getCart()} )
-		// 	httpService.put(CONFIG.API_FIREBASE_URL + "users/" + data.localId, data)
-		// } else {
-		// 	localStorageService.setCart(data.cart)
-		// }
+		console.log(localStorageService.getCart())
+		if (!data.cart && (Object.keys(localStorageService.getCart()).length !== 0)) {
+			setCurrentUser( {...currentUser, cart:localStorageService.getCart()} )
+			httpService.put(CONFIG.API_FIREBASE_URL + "users/" + data.localId, data)
+		} else {
+			localStorageService.setCart(data.cart)
+		}
 	}
 
-	if (localStorage["user-local-id"]) {
-		getUserData(localStorageService.getUserId())
-	}
+
+	useEffect(()=>{
+		if (localStorage["user-local-id"] && !currentUser.id) {
+			getUserData(localStorageService.getUserId())
+		}
+	}, [])
+
 
 	return (
 		<AuthContext.Provider value={{ signUp, logIn, logOut, getUserData, currentUser, setCurrentUser }}>
