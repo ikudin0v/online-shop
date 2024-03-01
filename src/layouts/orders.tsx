@@ -12,7 +12,7 @@ const OrdersPage = () => {
 			<div className='card border border-0 shadow p-3 mb-3 bg-body-tertiary rounded' key={order}>
 				<div className='fs-4'>{"Заказ № "+order}</div>
 				{Object.keys(currentUser.orders[order]).map((item)=>(
-					<div className='d-flex flex-row p-1'>
+					<div className='d-flex flex-row p-1' key={item}>
 						<img src={currentUser.orders[order][item].product.img[0]} alt="" style={{height: "6vh"}} className="img-fluid rounded me-2"/>
 						<div className='d-flex flex-column'>
 							<div className='fs-5'>{currentUser.orders[order][item].product.name}</div>
