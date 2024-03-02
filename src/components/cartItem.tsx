@@ -11,10 +11,10 @@ const CartItem = ({ cartItem, cart, changeQuantity, deleteFromCart }: CartItem) 
 	return (
 		<div className="card border border-0 shadow p-3 mb-3 bg-body-tertiary rounded" key={cartItem}>
 			<div className="row g-4">
-				<div className="col-md-2">
+				<div className="col-4">
 					<img src={cart[cartItem].product.img[0]} className="img-fluid rounded " alt="..." />
 				</div>
-				<div className="col-md-10">
+				<div className="col-8">
 					<div className="card-body ps-3 pt-0">
 						<div className="d-flex flex-row justify-content-between">
 							<p className="card-title fs-2">{cart[cartItem].product.name}</p>

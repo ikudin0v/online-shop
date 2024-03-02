@@ -16,7 +16,7 @@ interface ProductsListPageProps {
 let prevCategory: any
 
 const ProductsListPage = ({ match }: ProductsListPageProps) => {
-	const PATH = "catalog/" + match.params.page + "/" + match.params.subCategory
+	const PATH = "catalog/" + match.params.sex + "/" + match.params.subCategory
 	const pageSize = 15
 	const [currentPage, setCurrentPage] = useState<number>(1)
 	const [productList, setProductList] = useState<object[]>([])
@@ -44,9 +44,9 @@ const ProductsListPage = ({ match }: ProductsListPageProps) => {
 		setFilterColors(getColors(newProductList))
 	}
 
-	if (prevCategory !== match.params.page + match.params.subCategory) {
+	if (prevCategory !== match.params.sex + match.params.subCategory) {
 		setCurrentPage(1)
-		prevCategory = match.params.page + match.params.subCategory
+		prevCategory = match.params.sex + match.params.subCategory
 	}
 
 	useEffect(() => {
@@ -85,12 +85,17 @@ const ProductsListPage = ({ match }: ProductsListPageProps) => {
 			) : (
 				<>
 					<div className="container d-flex flex-row justify-content-between">
-						<Link to={"/" + match.params.page} className="btn btn-secondary m-3">
-							{"<< Назад"}
-						</Link>
-						<div className="container d-flex flex-row m-3 w-25 align-items-center">
-							<label className="mx-3">Сортировать: </label>
-							<select className="form-select" aria-label="Default select example" onChange={sortBy}>
+						<div className="container p-0 m-0">
+							<Link to={"/" + match.params.sex} className="btn btn-secondary my-3 me-2">
+								{"<<Назад"}
+							</Link>
+							<button className="d-md-none btn btn-primary my-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+								Фильтр
+							</button>
+						</div>
+						<div className="d-flex flex-row my-3 align-items-center justify-content-end" style={{ width: "20rem" }}>
+							<label className="me-2">Сортировать: </label>
+							<select className="form-select" style={{ width: "15rem" }} aria-label="Default select example" onChange={sortBy}>
 								<option value={"default"}>По умолчанию</option>
 								<option value={"asc"}>По возрастанию цены</option>
 								<option value={"desc"}>По убыванию цены</option>
@@ -101,9 +106,9 @@ const ProductsListPage = ({ match }: ProductsListPageProps) => {
 						<Filter filterColors={filterColors} colors={colors} onColorChange={handleFilterChange} />
 						<div className="row mx-4 justify-content-start">
 							<Pagination productCount={filteredProductList.length} pageSize={pageSize} onPageChange={handlePageChange} currentPage={currentPage} />
-							<div className="d-flex flex-row align-content-start align-items-start flex-wrap justify-content-start">
+							<div className="d-flex flex-row align-content-start align-items-start flex-wrap justify-content-start p-0">
 								{paginate(filteredProductList, currentPage, pageSize).map((item: any) => (
-									<ProductCard product={item} link={"/" + match.params.page + "/" + match.params.subCategory + "/" + item.manufacturerCode} key={item.manufacturerCode} />
+									<ProductCard product={item} link={"/" + match.params.sex + "/" + match.params.subCategory + "/" + item.manufacturerCode} key={item.manufacturerCode} />
 								))}
 							</div>
 							<Pagination productCount={filteredProductList.length} pageSize={pageSize} onPageChange={handlePageChange} currentPage={currentPage} />

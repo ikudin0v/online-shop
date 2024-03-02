@@ -21,7 +21,7 @@ function App() {
 					<Route path="/:sex/cart" render={() => <CartPage />} />
 					<Route path="/:sex/orders" render={() => <OrdersPage />} />
 					<Route path="/:sex/:subCategory/:product" render={(props) => <ProductPage {...props} />} />
-					<Route path="/:page/:subCategory" render={(props) => <ProductsListPage {...props} />} />
+					<Route path="/:sex/:subCategory" render={(props) => <ProductsListPage {...props} />} />
 					<Route path="/:sex" render={(props) => <MainPage {...props} />} />
 
 					<Redirect from="/" to="/female" />

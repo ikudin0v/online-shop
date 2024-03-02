@@ -32,7 +32,7 @@ const SearchPage = ({ location }: SearchProps) => {
 
 	return (
 		<div className="container">
-			<p className="display-3">{"Результаты поиска по запросу " + `&quot;` + query.parse(location.search).searchReq + `&quot;`}</p>
+			<p className="display-3">{"Результаты поиска по запросу \"" + query.parse(location.search).searchReq + "\""}</p>
 			<div className="container d-flex flex-row mt-3">
 				{findedProducts ? (
 					<div className="row w-100 justify-content-around my-3">

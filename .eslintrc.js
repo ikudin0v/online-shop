@@ -31,7 +31,7 @@ module.exports = {
 		indent: ["error", "tab", { SwitchCase: 1 }],
 		"no-useless-escape": 0,
 		"multiline-ternary": 0,
-		"array-callback-return": 0
-		// "no-unneeded-ternary": 0
+		"array-callback-return": 0,
+		"react/jsx-no-comment-textnodes": 0
 	}
 }

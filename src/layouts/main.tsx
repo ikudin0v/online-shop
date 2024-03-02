@@ -9,13 +9,11 @@ interface MainProps {
 
 const MainPage = ({ match }: MainProps) => {
 	const PATH = "categories/" + match.params.sex + ".json"
-	console.log(match)
 	const [categories, setCategories] = useState({})
 	const sexToRus = { male: "Мужчинам", female: "Женщинам", kids: "Детям" }
 
 	async function getCategories() {
 		const { data } = await httpService.get(CONFIG.API_FIREBASE_URL + PATH)
-		console.log(data)
 		setCategories(data)
 	}
 
@@ -25,29 +23,58 @@ const MainPage = ({ match }: MainProps) => {
 
 	return (
 		<div className="container d-flex flex-row">
-			<div className="d-flex flex-column m-3 w-25">
-				{Object.keys(categories).length !== 0 ? (
-					Object.keys(categories)
-						.reverse()
-						.map((category: string) => (
-							<ul className="list-group m-2" key={category}>
-								<li className="list-group-item list-group-item-primary">{category}</li>
-								{Object.keys(categories[category as keyof typeof categories]).map((subCategory) => (
-									<li className="list-group-item list-group-item-action" key={match.params.sex + subCategory}>
-										<Link className="text-decoration-none text-reset" to={"/" + match.params.sex + "/" + subCategory}>
-											{categories[category as keyof typeof categories][subCategory]}
-										</Link>
-									</li>
+			{Object.keys(categories).length !== 0 ? (
+				<>
+					<div className="d-none d-md-flex flex-column m-3 w-25">
+						{Object.keys(categories)
+							.reverse()
+							.map((category: string) => (
+								<ul className="list-group m-2" key={category}>
+									<li className="list-group-item list-group-item-primary">{category}</li>
+									{Object.keys(categories[category as keyof typeof categories]).map((subCategory) => (
+										<li className="list-group-item list-group-item-action" key={match.params.sex + subCategory}>
+											<Link className="text-decoration-none text-reset" to={"/" + match.params.sex + "/" + subCategory}>
+												{categories[category as keyof typeof categories][subCategory]}
+											</Link>
+										</li>
+									))}
+								</ul>
+							))}
+					</div>
+
+					<div className="d-md-none offcanvas offcanvas-start" tabIndex={-1} id="offcanvasCategories" aria-labelledby="offcanvasExampleLabel" style={{ width: "20rem" }}>
+						<div className="offcanvas-header">
+							<h5 className="offcanvas-title" id="offcanvasExampleLabel">Категории</h5>
+							<button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+						</div>
+						<div className="offcanvas-body">
+							{Object.keys(categories)
+								.reverse()
+								.map((category: string) => (
+									<ul className="list-group m-2" key={category}>
+										<li className="list-group-item list-group-item-primary">{category}</li>
+										{Object.keys(categories[category as keyof typeof categories]).map((subCategory) => (
+											<li className="list-group-item list-group-item-action" key={match.params.sex + subCategory}>
+												<Link className="text-decoration-none text-reset" to={"/" + match.params.sex + "/" + subCategory}>
+													{categories[category as keyof typeof categories][subCategory]}
+												</Link>
+											</li>
+										))}
+									</ul>
 								))}
-							</ul>
-						))
-				) : (
-					<></>
-				)}
-			</div>
-			<div className="d-flex flex-column m-3 w-75">
+						</div>
+					</div>
+				</>
+			) : (
+				<></>
+			)}
+
+			<div className="d-flex flex-column m-3 w-100">
 				<h1>{sexToRus[match.params.sex as keyof typeof sexToRus]}</h1>
 				<p>{"this is main page for " + match.params.sex}</p>
+				<button className="d-md-none btn btn-primary my-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCategories" aria-controls="offcanvasCategories">
+					Категории
+				</button>
 				<p>
 					Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi
 					architecto beatae vitae dicta sunt, explicabo. Nemo enim ipsam voluptatem, quia voluptas sit, aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos, qui ratione

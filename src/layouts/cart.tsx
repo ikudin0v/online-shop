@@ -69,8 +69,16 @@ const CartPage = () => {
 				</span>
 				<br />
 			</div>
-			<div className="container d-flex flex-row justify-content-between">
-				<div className="col-md-8">
+			<div className="container d-md-flex d-none flex-row justify-content-between">
+				<div className="col-8">
+					{Object.keys(currentUser.cart).map((cartItem: any) => (
+						<CartItem cartItem={cartItem} cart={currentUser.cart} changeQuantity={changeQuantity} key={cartItem} deleteFromCart={deleteFromCart} />
+					))}
+				</div>
+				<CartSummary totalItems={getTotalItems()} totalCost={getTotalCost()} onMakeOrder={() => makeOrder()} />
+			</div>
+			<div className="container d-md-none d-flex flex-column">
+				<div className="col-12">
 					{Object.keys(currentUser.cart).map((cartItem: any) => (
 						<CartItem cartItem={cartItem} cart={currentUser.cart} changeQuantity={changeQuantity} key={cartItem} deleteFromCart={deleteFromCart} />
 					))}
