@@ -44,7 +44,9 @@ const MainPage = ({ match }: MainProps) => {
 
 					<div className="d-md-none offcanvas offcanvas-start" tabIndex={-1} id="offcanvasCategories" aria-labelledby="offcanvasExampleLabel" style={{ width: "20rem" }}>
 						<div className="offcanvas-header">
-							<h5 className="offcanvas-title" id="offcanvasExampleLabel">Категории</h5>
+							<h5 className="offcanvas-title" id="offcanvasExampleLabel">
+								Категории
+							</h5>
 							<button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 						</div>
 						<div className="offcanvas-body">

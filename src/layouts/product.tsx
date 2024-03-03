@@ -73,7 +73,7 @@ const ProductPage = ({ match }: ProductPageProps) => {
 		<>
 			<div className="container d-flex flex-row">
 				<Link to={"/" + match.params.sex + "/" + match.params.subCategory} className="btn btn-secondary mt-3">
-					{"<< Назад"}
+					{"Назад"}
 				</Link>
 			</div>
 			{Object.keys(product).length !== 0 ? (

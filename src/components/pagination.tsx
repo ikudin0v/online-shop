@@ -17,10 +17,10 @@ const Pagination = ({ productCount, pageSize, currentPage, onPageChange }: Pagin
 
 	return (
 		<nav aria-label="Page navigation example">
-			<ul className="pagination justify-content-center">
+			<ul className="pagination justify-content-center flex-wrap">
 				<li className={currentPage === 1 ? "page-item disabled" : "page-item"}>
 					<a className="page-link" href="#" onClick={() => onPageChange(currentPage - 1)}>
-						Previous
+						Назад
 					</a>
 				</li>
 				{pagesList.map((pageIndex: number) => (
@@ -32,7 +32,7 @@ const Pagination = ({ productCount, pageSize, currentPage, onPageChange }: Pagin
 				))}
 				<li className={currentPage === pagesList[pagesList.length - 1] ? "page-item disabled" : "page-item"}>
 					<a className="page-link" href="#" onClick={() => onPageChange(currentPage + 1)}>
-						Next
+						Вперёд
 					</a>
 				</li>
 			</ul>

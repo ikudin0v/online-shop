@@ -29,7 +29,7 @@ const Filter = ({ filterColors, colors, onColorChange }: FilterProps) => {
 				</div>
 			</div>
 
-			<div className="d-md-none offcanvas offcanvas-start" tabIndex={-1} id="offcanvasExample" aria-labelledby="offcanvasExampleLabel" style={{ width: "25rem" }}>
+			<div className="d-md-none offcanvas offcanvas-start" tabIndex={-1} id="offcanvasExample" aria-labelledby="offcanvasExampleLabel" style={{ width: "20rem" }}>
 				<div className="offcanvas-header">
 					<h5 className="offcanvas-title" id="offcanvasExampleLabel">
 						Фильтр
